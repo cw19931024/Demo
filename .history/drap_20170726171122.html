@@ -1,0 +1,92 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        .container {
+            width: 1000px;
+            margin: 0 auto;
+            min-height: 100%;
+            border: 1px solid #ddd;
+            padding: 10px;
+            box-sizing: border-box;
+            overflow: hidden;
+            background: seagreen;
+        }
+
+        .container #content {
+            min-height: 600px;
+            border: 1px solid #ccc;
+            width: calc(100% - 426px);
+            float: left;
+            margin: 0 10px;
+            background: #ddd;
+        }
+
+        .container .input {
+            width: 200px;
+            border: 1px solid #ddd;
+            min-height: 600px;
+            float: left;
+            background: white;
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="input">
+            <!-- <div class="inputDiv" id="input-header" draggable="true" ondragstart="drap(event)">
+                1
+            </div> -->
+            <div class="inputDiv" id="input-header" draggable="true">11111</div>
+        </div>
+         <!-- <div id="content" ondrop="drop(event)" ondragover="allowDrop(event)"></div>  -->
+          <div id="content"></div> 
+        <div class="input">
+
+        </div>
+    </div>
+</body>
+<script src="js/jquery.min.js"></script>
+<script type="text/javascript">
+$(function(){
+    $('.inputDiv').on('dragstart',function(){
+        console.log($(this))
+    })
+
+    $('#content').on('drop',function(){
+        
+    })
+})
+    // function allowDrop(ev) {
+    //     ev.preventDefault();
+    // }
+
+    // function drap(ev) {
+    //     console.log(ev)
+    //     ev.dataTransfer.setData("idName", ev.target.id);
+    // }
+
+    // function drop(ev) {
+    //     ev.preventDefault();
+    //     var data=ev.dataTransfer.getData("idName");
+    //     var dom = JSON.parse(JSON.stringify(document.getElementById(data)))
+    //     console.log(typeof dom)
+    //     ev.target.appendChild(dom);
+    // }
+</script>
+
+</html>

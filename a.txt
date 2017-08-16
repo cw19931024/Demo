@@ -1,0 +1,1490 @@
+approvalProcessModule.constant('apConstant', {
+    customTimeSettingsList: [
+				{
+					name: "自定义",
+					isDisabled: false
+				},
+				{
+					name: "今天",
+					startDate: new moment(),
+					endDate: new moment(),
+					isDisabled: true
+				},
+				{
+					name: "三天",
+					startDate: new moment().subtract(2, 'days'),
+					endDate: new moment(),
+					isDisabled: true
+				},
+				{
+					name: "本周",
+					startDate: new moment().startOf('isoweek'),
+					endDate: new moment(),
+					isDisabled: true
+				},
+				{
+					name: "上周",
+					startDate: new moment().subtract(1,'week').startOf('isoweek'),
+					endDate: new moment().subtract(1,'week').endOf('isoweek'),
+					isDisabled: true
+				},
+				{
+					name: "本月",
+					startDate: new moment().startOf('month'),
+					endDate: new moment(),
+					isDisabled: true
+				},
+				{
+					name: "上月",
+					startDate: new moment().subtract(1,'months').startOf('month'),
+					endDate: new moment().subtract(1,'months').endOf('month'),
+					isDisabled: true
+				},
+				{
+					name: "今年",
+					startDate: new moment().startOf('year'),
+					endDate: new moment(),
+					isDisabled: true
+				},
+				{
+					name: "去年",
+					startDate: new moment().subtract(1,'year').startOf('year'),
+					endDate: new moment().subtract(1,'year').endOf('year'),
+					isDisabled: true
+				}
+			]
+});
+
+approvalProcessModule.controller('apListController', function ($rootScope, $scope, $filter, $location, messageFactory, commonDlgService, ngTableParams, approvalProcessFactory, apDlgService, commonFactory, apConstant) {
+
+	$scope.pageHeaderData = [
+		{
+			text: "人事OA"
+		},
+		{
+			text: "审批流程"
+		},
+		{
+			text: "审批流程列表"
+		}
+	];
+
+	$scope.settings = {
+		searchTimeKindList: [{key: "start_time_", value: "创建时间"}, {key: "end_time_", value: "结束时间"}],
+		typeList: [],
+		flowList: [],
+		runningStateList: [{key: 1, value: "审批中"}, {key:2, value: "审批通过"},{key:3, value: "已驳回"}],
+		deptEmp: {
+			deptStyle: "width: 120px;",
+			employeeStyle: "width: 100px;",
+			//includeLeaveEmp: true,
+			userState:false,
+			defaultDeptValue: "不限部门",
+			defaultEmpValue: "不限员工",
+			keyIdOrUuid: false,
+			permission: {
+				perName: "plutus:审批流:流程列表查看"
+			},
+			onInitComplete: function() {
+				if (!$scope.settings.isDeptEmployeeSelectInit) {
+					$scope.settings.isDeptEmployeeSelectInit = true;
+					$scope.reloadTable();
+				}
+			}
+		},
+		deptList: [],
+		empList: [],
+		isDeptEmployeeSelectInit: false,
+		customTimeSettings: {
+			width: 137,
+			data: "本月",
+			startDateIsDisabled: false,
+			endDateIsDisabled: false,
+			list: apConstant.customTimeSettingsList		
+		}
+	};
+
+
+	//切换离职异动员工
+	$scope.changeLeaving = function(){
+		$scope.settings.deptEmp.userState = $scope.param.includetransfer;
+	};
+
+	$scope.emptyParam = function() {
+		$scope.param = {
+			dateType: "start_time_",
+			startDate: new moment().startOf('month').format("YYYY-MM-DD"),
+			endDate: new moment().format("YYYY-MM-DD"),
+			typeId: undefined,
+			flowId: undefined,
+			runningState: undefined
+		}
+
+		if ($scope.reInitDeptEmpSelect) {
+			$scope.reInitDeptEmpSelect();
+		} else {
+			$scope.param.deptUuid = undefined;
+			$scope.param.empUuid = undefined;
+		}
+
+		$scope.settings.customTimeSettings.data = "本月";
+	}
+
+	$scope.onTypeIdChange = function() {
+		var _name = "";
+		if (angular.isDefined($scope.param.typeId) && $scope.param.typeId != null) {
+			for (var i = 0; i < $scope.settings.typeList.length; i++) {
+				if ($scope.settings.typeList[i].typeId == $scope.param.typeId) {
+					_name = $scope.settings.typeList[i].typeName;
+				}
+			}
+			approvalProcessFactory.getFlowList($scope.param.typeId, _name).then(function(data) {
+				$scope.settings.flowList = data;
+				$scope.param.flowId = undefined;
+			});
+		} else {
+			$scope.settings.flowList = [];
+			$scope.param.flowId = undefined;
+		}
+	}
+
+	$scope.onSearchBtnClick = function() {
+		$scope.reloadTable();
+	}
+
+	$scope.onDelClick = function(row) {
+		commonDlgService.confirm("删除流程", "流程删除后不能还原，您确定要删除吗？").then(function(isContinue) {
+			if (isContinue) {
+				approvalProcessFactory.deleteByProcInstId(row.procInstId).then(function(data) {
+			        if (data.status == 0) {
+                       messageFactory.successMsg("删除流程成功");                       
+                       if (row.jiaoyiFlag) {
+                          approvalProcessFactory.rollbackChangeStatus(row.businessId, row.flowName);
+                       }
+                       $scope.reloadTable();
+                    } else {
+                        messageFactory.errorMsg(data.message);
+                    }
+				});
+			}
+		});
+	}
+
+	$scope.onNewApprovalBtnClick = function() {
+		apDlgService.newApproval().then(function(isNeedReload) {
+			if (isNeedReload) {
+				$scope.reloadTable();
+			}
+		});
+	}
+
+	$scope.onNewAttendanceApprovalBtnClick = function() {
+		apDlgService.newAttendanceApproval().then(function(isNeedReload) {
+			if (isNeedReload) {
+				$scope.reloadTable();
+			}
+		});
+	}
+
+	$scope.excel = function() {
+		var p = "",
+			_getById = function(id, idName, valueName, list) {
+				var _r = "";
+				list.forEach(function(item) {
+					if (item[idName] == id) {
+						_r = item[valueName];
+					}
+				});
+				return _r;
+			};
+		for (c in $scope.param) {
+			console.log($scope.param[c])
+			console.log($scope.param[c] == null);
+			console.log($scope.param[c] == "null");
+			if (typeof $scope.param[c] != "undefined" && $scope.param[c] != null) {
+				if (p == "") {
+					p = "?criteria." + c + "=" + $scope.param[c];
+				} else {
+					p = p + "&criteria." + c + "=" + $scope.param[c];
+				}
+			}
+		}
+		p = p + "&exportColumns=" + '{"procInstId": "流程编号","flowTypeName": "流程类型","flowName": "流程名称","empName": "申请人","startDate": "创建时间","endDate": "结束时间","runningState": "状态"}';
+		p = p + "&exportConditions=" + ($scope.param.dateType == "start_time_" ? "创建时间" : "结束时间") + "," +
+							 "开始时间:" + $scope.param.startDate + ",结束时间:" + $scope.param.endDate + "," +
+							 (($scope.param.typeId || $scope.param.flowId) ? 
+							 	("流程名称:" + ($scope.param.typeId ? (_getById($scope.param.typeId, "typeId", "typeName", $scope.settings.typeList) + ",") : "") + ($scope.param.flowId ? _getById($scope.param.flowId, "typeFlowId", "flowName", $scope.settings.flowList) : "") + ",") 
+							 	: "") +
+							 (($scope.param.deptUuid || $scope.param.empUuid) ? 
+							 	("申请人:" + ($scope.param.deptUuid ? (_getById($scope.param.deptUuid, "deptUuid", "deptName", $scope.settings.deptList) + ",") : "") + ($scope.param.empUuid ? _getById($scope.param.empUuid, "employeeUuid", "name", $scope.settings.empList) : "") + ",")
+							 	: "") +
+							 ($scope.param.runningState ? ("流程状态:" + _getById($scope.param.runningState, "key", "value", $scope.settings.runningStateList)) : "");
+		 
+
+		window.location.href = "/workflow/bus/instance/ajaxExportList.do" + p;
+	}
+
+	$scope.setReInitDeptEmpSelectFn = function(data) {
+		$scope.reInitDeptEmpSelect = data.fn;
+	}
+
+	$scope.reloadTable = function() {
+		$scope["tableParams"].parameters().page = 1;
+		$scope["tableParams"].reload();	
+	}
+
+	$scope.tableParams = new ngTableParams({
+		page: 1,
+		count: 20
+	}, {
+		total: 0,
+		getData: function ($defer, params) { 
+			if ($scope.settings.isDeptEmployeeSelectInit) {
+				approvalProcessFactory.getList(
+					$scope.param,
+					params.page(),
+					params.count()
+				).then(function(data) {
+					params.total(data.totalCount);
+					$defer.resolve(data.resultList); 
+				});				
+			}
+		}
+	});
+
+	$scope.init = function() {
+		approvalProcessFactory.getTypeList().then(function(data) {
+			$scope.settings.typeList = data;
+		});
+	}
+
+	$scope.emptyParam();
+	$scope.init();
+	$rootScope.$emit("updateTitleEvent", $scope.pageHeaderData[2].text + '_人事OA');
+});
+
+approvalProcessModule.controller('approvalDetailCommonController', function ($rootScope, $scope, $window, $http, $filter, $location, messageFactory, commonDlgService, approvalProcessFactory, apDlgService, permissionFactory, commonFactory, commonDlgService) {
+
+	$scope.settings = {
+		flowId: $location.search()['flowId'],
+		procInstId: $location.search()['procInstId'],
+		procDefId: $location.search()['procDefId'],
+		isAddMode: angular.isDefined($location.search()['flowId']) && $location.search()['isEdit']!='true',
+		title: "",
+		isSubmiting: false,
+		empName: "",
+		writeTime: "",
+		detailList: [],
+		attachments: [],
+		taskList: [],
+		commentIsOk: "true",
+		flowData: {},
+		checkFlowDataFlag:false,
+		checkFlowDataMsg:'',
+		disabledFlag:true,
+		checkFlag : true,
+		auditType: ''
+	};
+	//初始化时间
+	$scope.initialDateTime = $filter('date')(new Date(),'yyyy-MM-dd HH:mm');
+	$scope.initialDay =  $filter('date')(new Date(),'yyyy-MM-dd');
+	$scope.initialTime =  $filter('date')(new Date(),'HH:mm');
+	$scope.initialHour =  $filter('date')(new Date(),'HH时');
+	var nowDate=new Date();
+	nowDate.setHours(nowDate.getHours()+1);
+	$scope.initialTime2 = nowDate.getHours() + ':'+ (nowDate.getMinutes()>=10 ? nowDate.getMinutes():('0'+nowDate.getMinutes()));
+	$scope.initialHour2= nowDate.getHours()+'时';
+	$scope.initialHour =  $filter('date')(new Date(),'HH时');
+	$scope.layers=['上午','下午'];
+	if($filter('date')(new Date(),'HH') > 12){
+		$scope.initialLayer = '下午'
+	}else{
+		$scope.initialLayer = '上午'
+	}
+	$scope.hours=['0时','1时','2时','3时','4时','5时','6时','7时','8时','9时','10时','11时','12时','13时','14时','15时','16时','17时','18时','19时','20时','21时','22时','23时'];
+	$scope.comment = {
+		taskId: $location.search()['taskId'],
+		processInstanceId: $location.search()['procInstId'],
+		message: ""
+	};
+
+	$scope.isEdit = $location.search()['isEdit']=='true';
+
+	$scope.pageHeaderData = [
+		{
+			text: "人事OA"
+		},
+		{
+			text: "审批流程"
+		},
+		{
+			text: $scope.comment.taskId ? "审批任务列表" : "审批流程列表"
+		},
+		{
+			text: $scope.settings.isAddMode ? "新建审批申请" : ($scope.comment.taskId ? "任务详情" : "申请审批详情")
+		}
+	];
+
+	$scope.onCancelBtnClick = function() {
+		close();
+	}
+
+	$scope.onViewHistoryClick = function() {
+		apDlgService.showProcessDetail($scope.settings.procInstId, undefined, 0);
+	}
+
+	$scope.onShowDetail = function(procInstId, taskkey, title) {
+		apDlgService.showProcessDetail(procInstId, taskkey, 1, title);
+	}
+
+	$scope.onViewItemClick = function(item) {
+		window.open(item.photoURL);
+	}
+
+	$scope.onRemoveItemClick = function(list, index, item) {
+		$http.get(item.delete_url);
+		list.splice(index, 1)
+	}
+
+	$scope.onUploadFileBtnClick = function(index) {
+		permissionFactory.getSysOptionByName('MaxPhotoSize').then(function(maxSize) {
+			commonDlgService.uploadFile(
+				[{"module": "workflow"}, {"businessId": $scope.settings.flowId}, {"photoDesc": index}],
+				[
+					{
+			            name: 'imageFilter',
+			            fn: function(item /*{File|FileLikeObject}*/, options) {
+			                var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|',
+			                	_result = true;
+		                	if (maxSize > 0 && item.size > maxSize * 1024) {
+		                		messageFactory.errorMsg("管理选项-其他设置中限制上传单个附件不能超过" + maxSize + "KB，请修改后重新上传。");
+		                		_result = false;
+		                	}
+			                return _result;
+			            }
+		        	}
+	        	]
+			).then(function(data) {
+				data.forEach(function(item) {
+					var _item = item.response;
+					if (angular.isUndefined($scope.settings.attachments[index].photoList)) {
+						$scope.settings.attachments[index].photoList = [];
+					}
+					$scope.settings.attachments[index].photoList.push({
+						photoId: _item.photoId,
+						photoName: _item.name,
+						photoURL: _item.url,
+						delete_url: _item.delete_url
+					});
+				});
+			});
+		});
+	};
+	$scope.save = function() {
+		if (angular.isDefined($scope.comment.taskId)) {
+			if(angular.element('#newApForm').validationEngine('validate')){
+				$scope.settings.isSubmiting = true;
+				if ($scope.settings.commentIsOk == "true") {
+					approvalProcessFactory.agreeComment($scope.comment).then(function(data) {
+			            if (data.status == 0) {
+			                messageFactory.successMsg("同意申请成功");
+			                $location.search('taskId', null);
+							$window.location.reload();
+			            } else {
+			                messageFactory.errorMsg(data.message);
+			            }
+			            $scope.settings.isSubmiting = false;
+					});
+				} else {
+					approvalProcessFactory.rejectComment($scope.comment).then(function(data) {
+			            if (data.status == 0) {
+			                messageFactory.successMsg("驳回申请成功");
+			                $location.search('taskId', null);
+							$window.location.reload();
+			            } else {
+			                messageFactory.errorMsg(data.message);
+			            }
+			            $scope.settings.isSubmiting = false;
+					});
+				}
+			}
+
+		} else {
+			permissionFactory.getCurrentUser().then(function(data) {
+				var _data = {},
+					_photoIds = "",
+					_list,
+					required,
+					_flagList=[];
+					$scope.settings.checkFlag=true;
+				_data["flowinstance.deptId"] = data.deptId;
+				_data["flowinstance.deptUuid"] = data.deptUuid;
+				_data["flowinstance.deptName"] = data.deptName;
+				_data["flowinstance.employeeId"] = data.employeeId;
+				_data["flowinstance.employeeUuid"] = data.employeeUuid;
+				_data["flowinstance.employeeName"] = data.employeeName;
+				_data["flowinstance.flowId"] = $scope.settings.flowId;
+				_data["flowinstance.businessType"] = $scope.settings.title;
+				_data["flowinstance.procDefId"] = $scope.settings.procDefId;
+
+				_list = angular.copy($scope.settings.detailList).filter(function(item) {
+					return item.itemName;
+				});
+
+				_list.forEach(function(item, index) {
+					if (item.itemName) {
+						var _str = "flowinstance.itemList[" + index + "].";
+						_data[_str + "itemName"] = item.itemName;
+						_data[_str + "itemType"] = item.itemType;
+						_data[_str + "itemTypes"] = item.itemTypes;
+						_data[_str + "required"] = item.required;
+						required= item.required;
+						_data[_str + "itemTypesContent"] = item.itemTypesContent;
+						_data[_str + "contentType"] = item.contentType;
+						_data[_str + "content1"] = item.content1;
+						_data[_str + "content2"] = item.content2;
+						_data[_str + "content3"] = item.content3;
+						_data[_str + "content4"] = item.content4;
+					}
+
+					if(item.required == 1){
+						if(item.itemTypes == 0 || item.itemTypes == 1 || item.itemTypes == 2 || item.itemTypes == 3){
+							if(item.itemTypesContent == '' || item.itemTypesContent==undefined) {
+								_flagList.push(false);
+							}else{
+								_flagList.push(true);
+							}
+						}else if(item.itemTypes == 4){
+							if(item.contentType == 1 || item.contentType == 2){
+								if(item.content1==''||item.content2==''||item.content3=='' ){
+									_flagList.push(false);
+								}else{
+									_flagList.push(true);
+								}
+							}else if(item.contentType == 3){
+								if(item.content1==''||item.content2==''||item.content3==''||item.content4==''){
+									_flagList.push(false);
+								}else{
+									_flagList.push(true);
+								}
+							}else if(item.contentType == 4){
+								if(item.content1==''||item.content2=='' ){
+									_flagList.push(false);
+								}else{
+									_flagList.push(true);
+								}
+							}
+						}
+					}
+				_flagList.forEach(function (item) {
+					if(!item){
+						$scope.settings.checkFlag = false;
+					}
+				});
+
+				if($scope.settings.attachments){
+					$scope.settings.attachments.forEach(function(item, index) {
+						var _str = "flowinstance.attachmentsList[" + index + "].";
+						_data[_str + "itemName"] = item.itemName;
+						_data[_str + "itemType"] = item.itemType;
+						_data[_str + "itemTypes"] = 0;
+						_data[_str + "required"] = item.required;
+						_data[_str + "itemTypesContent"] = '';
+
+						if (item.photoList) {
+							item.photoList.forEach(function(c) {
+								if (_photoIds == "") {
+									_photoIds = c.photoId;
+								} else {
+									_photoIds = _photoIds + "," + c.photoId;
+								}
+							});
+						}
+
+						if(item.required == 1 && $scope.settings.checkFlag){
+							if(item.photoList && item.photoList.length>0){
+								$scope.settings.checkFlag = true;
+							}else{
+								$scope.settings.checkFlag = false;
+							}
+						}
+					});
+					_data["flowinstance.photoIds"] = _photoIds;
+				}
+					if(item.contentType == 1){
+						if(item.content2 > item.content3){
+							messageFactory.errorMsg('时间格式填写不正确！');
+							$scope.settings.checkFlag = false;
+							return;
+						}
+					}else if(item.contentType == 2){
+						var content2=parseInt(item.content2.match(/(\S*)时/)[1]);
+						var content3=parseInt(item.content3.match(/(\S*)时/)[1]);
+						if(content2 > content3){
+							messageFactory.errorMsg('时间格式填写不正确！');
+							$scope.settings.checkFlag = false;
+							return;
+						}
+					}else if(item.contentType == 4){
+						if(item.content1 > item.content2){
+							messageFactory.errorMsg('时间格式填写不正确！');
+							$scope.settings.checkFlag = false;
+							return;
+						}
+					}else if(item.contentType == 3){
+						if(item.content1 > item.content3){
+							messageFactory.errorMsg('时间格式填写不正确！');
+							$scope.settings.checkFlag = false;
+							return;
+						}else if(item.content1 == item.content3 && item.content2 > item.content4){
+							messageFactory.errorMsg('时间格式填写不正确！');
+							$scope.settings.checkFlag = false;
+							return;
+						}
+					}
+				});
+				if($scope.settings.checkFlag){
+					$scope.settings.isSubmiting = true;
+					approvalProcessFactory.newApproval(_data).then(function(data) {  //save
+						if (data.status == 0) {
+							messageFactory.successMsg("新建审批申请成功");
+							$location.search('flowId', null);
+							$location.search('isEdit', null);
+							$location.search('procInstId', data.object);
+							$window.location.reload();
+						} else {
+							messageFactory.errorMsg(data.message);
+						}
+						$scope.settings.isSubmiting = false;
+					});
+				}else{
+					if(required==1){
+						messageFactory.errorMsg('必填项不能为空');
+					}
+					$scope.settings.isSubmiting = false;
+					return;
+				}
+
+			});
+		}
+	};
+
+	$scope.dealData = function(data) {
+		$scope.settings.flowData = data;
+		$scope.settings.attachments = data.attachmentsList; //附件
+		if (data.itemList) {
+			data.itemList.forEach(function(item) {
+				if (item.itemTypes == 3) {
+					if ($scope.settings.detailList.length % 2 != 0) {
+						$scope.settings.detailList.push({});
+					}
+					$scope.settings.detailList.push(item);
+				} else {
+					$scope.settings.detailList.push(item);
+
+					if (item.itemTypes == 2) {
+						var _item =	$scope.settings.detailList[$scope.settings.detailList.length-1];
+						if (_item.itemTypesContent) {
+							_item.list = _item.itemTypesContent.split(",");
+						}
+						if ($scope.settings.isAddMode) {
+							_item.itemTypesContent = undefined;
+						}
+					}
+				}
+			});
+		}
+	};
+
+	$scope.init = function() {
+		if ($scope.settings.isAddMode) {
+			approvalProcessFactory.checkApplyFlow($scope.settings.flowId).then(function(data) {
+				if(data.status == 0){
+					$scope.settings.checkFlowDataFlag = true;
+					approvalProcessFactory.getNewApData($scope.settings.flowId).then(function(data) {
+						$scope.settings.title = data.flow.flowName;
+						$scope.settings.auditType = data.flow.auditType;
+						$scope.dealData(data);
+					});
+
+					commonFactory.getCurrentTime().then(function(data) {
+						$scope.settings.writeTime = data;
+					});
+
+					permissionFactory.getCurrentUser().then(function(data) {
+						$scope.settings.empName = data.deptName + " " + data.employeeName;
+					});
+				}else{
+					$scope.settings.checkFlowDataFlag = false;
+					$scope.settings.checkFlowDataMsg = data.message;
+				}
+			});
+		} else {
+			$scope.settings.checkFlowDataFlag = true;
+			approvalProcessFactory.getApItem($scope.settings.procInstId).then(function(data) {
+				$scope.settings.title = data.businessType;
+				$scope.settings.empName = data.deptName + " " + data.employeeName;
+				$scope.settings.writeTime = data.createdTime;
+				$scope.dealData(data);
+			});
+			approvalProcessFactory.getProcessTaskList($scope.settings.procInstId).then(function(data) {
+				$scope.settings.taskList = data;
+			});
+		}
+	};
+
+	$scope.init();
+	$rootScope.$emit("updateTitleEvent", $scope.pageHeaderData[3].text + '_人事OA');
+});
+
+approvalProcessModule.controller('apTaskListController', function ($rootScope, $scope, $filter, $location, messageFactory, commonDlgService, approvalProcessFactory, apDlgService, ngTableParams, apConstant) {
+	$scope.pageHeaderData = [
+		{
+			text: "人事OA"
+		},
+		{
+			text: "审批流程"
+		},
+		{
+			text: "审批任务列表"
+		}
+	];
+
+	$scope.settings = {
+		searchTimeKindList: ["创建时间", "结束时间"],
+		typeList: [],
+		flowList: [],
+		runningStateList: [{key: 1, value: "审批通过"}, {key:2, value: "待审批"}, {key:3, value: "已驳回"}],
+		createTypeList: [{key: 1, value: "申请人"}, {key:2, value: "审批人"}],
+		searchTimeKind: "创建时间",
+		deptEmp: {
+			deptStyle: "width: 120px;",
+			employeeStyle: "width: 100px;",
+			//includeLeaveEmp: true,
+			userState:false,
+			defaultDeptValue: "不限部门", 
+			defaultEmpValue: "不限员工", 
+			keyIdOrUuid: true
+		},
+		customTimeSettings: {
+			width: 137,
+			data: "本月",
+			startDateIsDisabled: false,
+			endDateIsDisabled: false,
+			list: apConstant.customTimeSettingsList		
+		}
+	};
+
+	$scope.param = {
+		beginCreateTime: "",
+		endCreateTime: "",
+		typeFlowId: undefined,
+		typeId: undefined,
+		createDeptId: undefined,
+		createEmployeeId: undefined,
+		runningState: undefined,
+		createType:1
+	}
+
+	$scope.emptyParam = function() {
+		$scope.param = {
+			beginCreateTime: new moment().startOf('month').format("YYYY-MM-DD"),
+			endCreateTime: new moment().format("YYYY-MM-DD"),
+			typeFlowId: undefined,
+			typeId: undefined,
+			createDeptId: undefined,
+			createEmployeeId: undefined,
+			runningState: undefined,
+			createType:1
+		}
+		$scope.settings.customTimeSettings.data = "本月";
+	}
+
+	$scope.onTypeIdChange = function() {
+		var _name = "";
+		if (angular.isDefined($scope.param.typeFlowId) && $scope.param.typeFlowId != null) {
+			for (var i = 0; i < $scope.settings.typeList.length; i++) {
+				if ($scope.settings.typeList[i].typeId == $scope.param.typeFlowId) {
+					_name = $scope.settings.typeList[i].typeName;
+				}
+			}
+			approvalProcessFactory.getFlowList($scope.param.typeFlowId, _name).then(function(data) {
+				$scope.settings.flowList = data;
+				$scope.param.typeId = undefined;
+			});				
+		} else {
+			$scope.settings.flowList = [];
+			$scope.param.typeId = undefined;
+		}	
+	}
+	$scope.changeLeaving = function(){
+		$scope.settings.deptEmp.userState = $scope.param.includetransfer;
+	};
+	$scope.onSearchBtnClick = function() {
+		$scope.reloadTable();
+	}
+
+	$scope.onEditClick = function (item) {
+		apDlgService.editPerson(item).then(function(isOK) {
+			if (isOK) {
+				$scope.reloadTable();
+			}
+		});
+	}
+
+	$scope.reloadTable = function() {
+		$scope["tableParams"].parameters().page = 1;
+		$scope["tableParams"].reload();	
+	}
+
+	$scope.tableParams = new ngTableParams({
+		page: 1,
+		count: 20
+	}, {
+		total: 0,
+		getData: function ($defer, params) {
+			approvalProcessFactory.getTaskList(
+				$scope.param,
+				params.page(),
+				params.count()
+			).then(function(data) {
+				params.total(data.totalCount);
+				$defer.resolve(data.resultList);
+			});
+		}
+	});
+
+	$scope.init = function() {
+		approvalProcessFactory.getTypeList().then(function(data) {
+			$scope.settings.typeList = data;
+		});
+	}
+
+	$scope.emptyParam();
+	$scope.init();
+	$rootScope.$emit("updateTitleEvent", $scope.pageHeaderData[2].text + '_人事OA');
+});
+
+//勤假申请的审批详情
+approvalProcessModule.controller('attendanceApprovalDetailController', function ($rootScope, $scope, $window, $http, $filter, $location,$timeout, messageFactory, commonDlgService, approvalProcessFactory, apDlgService, permissionFactory, commonFactory, commonDlgService) {
+	$scope.settings = {
+		flowId: $location.search()['flowId'],
+		procInstId: $location.search()['procInstId'],
+		procDefId: $location.search()['procDefId'],
+		isAddMode: angular.isDefined($location.search()['flowId']) && $location.search()['isEdit']!='true',
+		title: "",
+		allowManyDateSegment:1,
+		isSubmiting: false,
+		deptName: "",
+		employeeName: "",
+		remark: "",
+		detailList: [],
+		attachments: [],
+		taskList: [],
+		commentIsOk: "true",
+		flowData: {},
+		checkFlowDataFlag:false,
+		checkFlowDataMsg:'',
+		disabledFlag:true,
+		checkFlag : true,
+		deptAndEmp:[],
+		auditType:'',
+		duration:'',
+		durationDay:'',
+		addFlag: [],
+		attendanceTypes:[],
+		attendanceType:'',
+		attendTypeId:''
+	};
+	//初始化时间
+	$scope.initialDateTime = $filter('date')(new Date(),'yyyy-MM-dd HH:mm');
+	$scope.initialDay =  $filter('date')(new Date(),'yyyy-MM-dd');
+	$scope.initialTime =  $filter('date')(new Date(),'HH:mm');
+	$scope.initialHour =  $filter('date')(new Date(),'HH时');
+	var nowDate=new Date();
+	nowDate.setHours(nowDate.getHours()+1);
+	$scope.initialTime2 = nowDate.getHours() + ':'+ (nowDate.getMinutes()>=10 ? nowDate.getMinutes():('0'+nowDate.getMinutes()));
+	$scope.initHour2 = (nowDate.getHours()<10) ? ('0'+ nowDate.getHours()+'时') : (nowDate.getHours()+'时');
+	$scope.initHour = $filter('date')(new Date(),'HH时');
+	$scope.layers=['上午','下午'];
+	$scope.designLayers1=['早下班一小时','晚上班一小时'];
+	$scope.designLayers2=['迟到忘打卡','早退忘打卡'];
+	if($filter('date')(new Date(),'HH') > 12){
+		$scope.initialLayer = '下午'
+	}else{
+		$scope.initialLayer = '上午'
+	}
+	$scope.hours=['00时','01时','02时','03时','04时','05时','06时','07时','08时','09时','10时','11时','12时','13时','14时','15时','16时','17时','18时','19时','20时','21时','22时','23时'];
+	$scope.comment = {
+		taskId: $location.search()['taskId'],
+		processInstanceId: $location.search()['procInstId'],
+		message: ""
+	};
+
+	$scope.isEdit = $location.search()['isEdit']=='true';
+
+	$scope.pageHeaderData = [
+		{
+			text: "人事OA"
+		},
+		{
+			text: "审批流程"
+		},
+		{
+			text: $scope.comment.taskId ? "审批任务列表" : "审批流程列表"
+		},
+		{
+			text: $scope.settings.isAddMode ? "新建审批申请" : ($scope.comment.taskId ? "任务详情" : "申请审批详情")
+		}
+	];
+
+	$scope.onCancelBtnClick = function() {
+		close();
+	}
+
+	$scope.onViewHistoryClick = function() {
+		apDlgService.showProcessDetail($scope.settings.procInstId, undefined, 0);
+	}
+
+	$scope.onShowDetail = function(procInstId, taskkey, title) {
+		apDlgService.showProcessDetail(procInstId, taskkey, 1, title);
+	}
+
+	$scope.onViewItemClick = function(item) {
+		window.open(item.photoURL);
+	}
+
+	$scope.onRemoveItemClick = function(list, index, item) {
+		$http.get(item.delete_url);
+		list.splice(index, 1)
+	}
+
+	$scope.onUploadFileBtnClick = function(index) {
+		permissionFactory.getSysOptionByName('MaxPhotoSize').then(function(maxSize) {
+			commonDlgService.uploadFile(
+				[{"module": "workflow"}, {"businessId": $scope.settings.flowId}, {"photoDesc": index}],
+				[
+					{
+						name: 'imageFilter',
+						fn: function(item /*{File|FileLikeObject}*/, options) {
+							var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|',
+								_result = true;
+							if (maxSize > 0 && item.size > maxSize * 1024) {
+								messageFactory.errorMsg("管理选项-其他设置中限制上传单个附件不能超过" + maxSize + "KB，请修改后重新上传。");
+								_result = false;
+							}
+							return _result;
+						}
+					}
+				]
+			).then(function(data) {
+					data.forEach(function(item) {
+						var _item = item.response;
+						if (angular.isUndefined($scope.settings.attachments[index].photoList)) {
+							$scope.settings.attachments[index].photoList = [];
+						}
+						$scope.settings.attachments[index].photoList.push({
+							photoId: _item.photoId,
+							photoName: _item.name,
+							photoURL: _item.url,
+							delete_url: _item.delete_url
+						});
+					});
+				});
+		});
+	};
+	$scope.save = function() {
+		if (angular.isDefined($scope.comment.taskId)) {
+			if(angular.element('#newApForm').validationEngine('validate')){
+				$scope.settings.isSubmiting = true;
+				if ($scope.settings.commentIsOk == "true") {
+					approvalProcessFactory.agreeComment($scope.comment).then(function(data) {
+						if (data.status == 0) {
+							messageFactory.successMsg("同意申请成功");
+							$location.search('taskId', null);
+							$window.location.reload();
+						} else {
+							messageFactory.errorMsg(data.message);
+						}
+						$scope.settings.isSubmiting = false;
+					});
+				} else {
+					approvalProcessFactory.rejectComment($scope.comment).then(function(data) {
+						if (data.status == 0) {
+							messageFactory.successMsg("驳回申请成功");
+							$location.search('taskId', null);
+							$window.location.reload();
+						} else {
+							messageFactory.errorMsg(data.message);
+						}
+						$scope.settings.isSubmiting = false;
+					});
+				}
+			}
+
+		} else {
+			var _data = {},
+				_photoIds = "",
+				_list,
+				required,
+				_flagList=[],
+				errString;
+			var beginDate2,endDate2,beginTime2,endTime2,beginMonth2,endMonth2,beginMonth,endMonth,flag=true;
+			$scope.settings.checkFlag=true;
+			for(var i=0;i<$scope.settings.deptAndEmp.length;i++){
+				$scope.nameArray.push($scope.settings.deptAndEmp[i].name);
+			}
+			var nameIndex  =$scope.nameArray.indexOf($scope.settings.employeeName);
+			var data = $scope.settings.deptAndEmp[nameIndex];
+			_data["flowinstance.deptId"] = data.deptId;
+			_data["flowinstance.deptUuid"] = data.deptUuid;
+			_data["flowinstance.deptName"] = data.deptName;
+			_data["flowinstance.employeeId"] = data.employeeId;
+			_data["flowinstance.employeeUuid"] = data.employeeUuid;
+			_data["flowinstance.employeeName"] = data.name;
+			_data["flowinstance.flowId"] = $scope.settings.flowId;
+			_data["flowinstance.businessType"] = $scope.settings.title;
+			_data["flowinstance.procDefId"] = $scope.settings.procDefId;
+			_data["flowinstance.remark"] = $scope.settings.remark;
+			_data["flowinstance.attendTypeId"] = $scope.settings.attendTypeId;
+			_data["flowinstance.punchType"] = $scope.settings.attendanceType;
+			_data["flowinstance.auditType"] = $scope.settings.auditType;
+			_data["flowinstance.durationDay"] = $scope.settings.durationDay;
+			_data["flowinstance.duration"] = $scope.settings.duration;
+			_list = angular.copy($scope.settings.detailTimeList).filter(function(item) {
+				return item.itemName;
+			});
+			_list.forEach(function(item, index) {
+				if (item.itemName) {
+					var _str = "flowinstance.kqItemList[" + index + "].";
+					_data[_str + "itemName"] = item.itemName;
+					_data[_str + "itemType"] = item.itemType;
+					_data[_str + "itemTypes"] = item.itemTypes;
+					_data[_str + "required"] = item.required;
+					_data[_str + "itemTypesContent"] = item.itemTypesContent;
+					_data[_str + "contentType"] = item.contentType;
+					_data[_str + "beginDate"] = item.beginDate;
+					_data[_str + "endDate"] = item.endDate;
+					if(item.contentType == 2){
+						_data[_str + "beginTime"] = item.beginTime.substring(-1,2)+':00';
+						_data[_str + "endTime"] = item.endTime.substring(-1,2)+':00';
+					}else{
+						_data[_str + "beginTime"] = item.beginTime;
+						_data[_str + "endTime"] = item.endTime;
+					}
+				}
+
+				if(item.required == 1 && item.itemTypes == 4){
+					if(item.contentType == 1 || item.contentType == 2){
+						if(item.beginDate==''||item.beginTime==''||item.endTime=='' ){
+							_flagList.push(false);
+						}else{
+							_flagList.push(true);
+						}
+					}else if(item.contentType == 3){
+						if(item.beginDate==''||item.endDate==''||item.beginTime==''||item.endTime==''){
+							_flagList.push(false);
+						}else{
+							_flagList.push(true);
+						}
+					}else if(item.contentType == 4){
+						if(item.beginDate==''||item.endDate=='' ){
+							_flagList.push(false);
+						}else{
+							_flagList.push(true);
+						}
+					}else if(item.contentType == 5){
+						if(item.beginDate==''||item.endDate==''||item.beginTime==''){
+							_flagList.push(false);
+						}else{
+							_flagList.push(true);
+						}
+					}
+				}
+				_flagList.forEach(function (item) {
+					if(!item){
+						errString='必填项不能为空';
+						$scope.settings.checkFlag = false;
+					}
+				});
+
+				if($scope.settings.attachments){
+					$scope.settings.attachments.forEach(function(item, index) {
+						var _str = "flowinstance.attachmentsList[" + index + "].";
+						_data[_str + "itemName"] = item.itemName;
+						_data[_str + "itemType"] = item.itemType;
+						_data[_str + "itemTypes"] = 0;
+						_data[_str + "required"] = item.required;
+						_data[_str + "itemTypesContent"] = '';
+
+						if (item.photoList) {
+							item.photoList.forEach(function(c) {
+								if (_photoIds == "") {
+									_photoIds = c.photoId;
+								} else {
+									_photoIds = _photoIds + "," + c.photoId;
+								}
+							});
+						}
+
+						if(item.required == 1 && $scope.settings.checkFlag){
+							if(item.photoList && item.photoList.length>0){
+								$scope.settings.checkFlag = true;
+							}else{
+								errString='必填项不能为空';
+								$scope.settings.checkFlag = false;
+							}
+						}
+					});
+					_data["flowinstance.photoIds"] = _photoIds;
+				}
+
+				beginMonth=new Date(item.beginDate).getMonth();
+				endMonth=new Date(item.endDate).getMonth();
+
+				for(var j=index;j<$scope.settings.detailTimeList.length;j++) {
+					if(j<$scope.settings.detailTimeList.length-1){
+						flag=true;
+						beginDate2 = $scope.settings.detailTimeList[j+1].beginDate;
+						endDate2 = $scope.settings.detailTimeList[j+1].endDate;
+						beginTime2 = $scope.settings.detailTimeList[j+1].beginTime;
+						endTime2 = $scope.settings.detailTimeList[j+1].endTime;
+						//获取月份
+						beginMonth2=new Date(beginDate2).getMonth();
+					}else{
+						flag=false;
+					}
+
+
+					if (item.contentType == 1) {
+						if (item.beginTime > item.endTime) {
+							errString = '时间段开始时间不能大于结束时间！';
+							$scope.settings.checkFlag = false;
+							$scope.settings.durationDay=0;
+							break;
+						} else if (flag && item.beginDate == beginDate2) {
+							if ((item.endTime >= beginTime2 && item.beginTime <= beginTime2)||(item.endTime>=endTime2 && item.beginTime<=endTime2)||(item.beginTime > beginTime2 && item.beginTime < endTime2)||(item.endTime>=beginTime2 && item.endTime<endTime2)) {
+								errString = '时间段不能重叠，且每个时间段开始时间不得大于结束时间！';
+								$scope.settings.checkFlag = false;
+								$scope.settings.durationDay=0;
+								break;
+							}
+						}else if(flag && beginMonth2!=beginMonth){
+							errString = '不能跨月';
+							$scope.settings.checkFlag = false;
+							$scope.settings.durationDay=0;
+							break;
+						}
+					}else if (item.contentType == 2) {
+						var beginTime = parseInt(item.beginTime.match(/(\S*)时/)[1]);
+						var endTime = parseInt(item.endTime.match(/(\S*)时/)[1]);
+						if (beginTime > endTime) {
+							errString = '时间段开始时间不能大于结束时间！';
+							$scope.settings.checkFlag = false;
+							$scope.settings.durationDay=0;
+							break;
+						} else if (flag && item.beginDate == beginDate2) {
+							if ((endTime > parseInt(beginTime2.match(/(\S*)时/)[1]) && beginTime <= parseInt(beginTime2.match(/(\S*)时/)[1]))||(endTime > parseInt(endTime2.match(/(\S*)时/)[1]) && beginTime < parseInt(endTime2.match(/(\S*)时/)[1]))||(endTime > parseInt(beginTime2.match(/(\S*)时/)[1]) && endTime < parseInt(endTime2.match(/(\S*)时/)[1]))||(beginTime > parseInt(endTime2.match(/(\S*)时/)[1]) && beginTime < parseInt(endTime2.match(/(\S*)时/)[1]))) {
+								errString = '时间段之间不能重叠，且每个时间段开始时间不能大于结束时间！';
+								$scope.settings.checkFlag = false;
+								$scope.settings.durationDay=0;
+								break;
+							}
+						}else if(flag && beginMonth2!=beginMonth){
+							errString = '不能跨月';
+							$scope.settings.checkFlag = false;
+							$scope.settings.durationDay=0;
+							break;
+						}
+					}else if (item.contentType == 3) {
+						if ((item.beginDate > item.endDate)||(item.beginDate == item.endDate && item.beginTime > item.endTime)) {
+							errString = '时间段开始时间不能大于结束时间！';
+							$scope.settings.checkFlag = false;
+							$scope.settings.durationDay=0;
+							break;
+						} else if(flag && ((item.beginDate == beginDate2 && item.beginTime > endTime2)||(item.beginDate < beginDate2 && item.endDate > beginDate2)||(item.beginDate < endDate2 && item.endDate > endDate2) || (item.beginDate > beginDate2 && item.beginDate < endDate2)||(item.endDate > beginDate2 && item.endDate < endDate2) || (item.beginDate == beginDate2 && ((item.beginTime == beginTime2)||(item.beginTime > beginTime2 && endTime2!=beginTime2)||(item.beginTime < beginTime2 && item.beginTime!=item.endTime)))||(item.endDate == beginDate2 && item.endTime >= beginTime2 && item.beginTime<=endTime2)||(item.beginDate>beginDate2 && item.beginDate==endDate2 && item.beginTime<=endTime2))) {
+							errString = '时间段之间不能重叠，且每个时间段开始时间不能大于结束时间！';
+							$scope.settings.checkFlag = false;
+							$scope.settings.durationDay=0;
+							break;
+						}else if(beginMonth !=endMonth || (flag && beginMonth2!=beginMonth)){
+							errString = '不能跨月';
+							$scope.settings.checkFlag = false;
+							$scope.settings.durationDay=0;
+							break;
+						}
+					}else if (item.contentType == 4) {
+						if (item.beginDate > item.endDate) {
+							errString = '时间段开始时间不能大于结束时间！';
+							$scope.settings.checkFlag = false;
+							$scope.settings.durationDay=0;
+							break;
+						}else if(flag && ((item.beginDate <= beginDate2 && item.endDate >= beginDate2)||(item.beginDate <= endDate2 && item.endDate >=endDate2)||(item.beginDate > beginDate2 && item.beginDate < endDate2)||(item.endDate > beginDate2 && item.endDate < endDate2))){
+							errString = '时间段之间不能重叠，且每个时间段开始时间不能大于结束时间！';
+							$scope.settings.checkFlag = false;
+							$scope.settings.durationDay=0;
+							break;
+						}else if(beginMonth !=endMonth || (flag && beginMonth2!=beginMonth)){
+							errString = '不能跨月';
+							$scope.settings.checkFlag = false;
+							$scope.settings.durationDay=0;
+							break;
+						}
+					}else if (item.contentType == 5) {
+						if (item.endDate) {
+							if (item.beginDate > item.endDate) {
+								errString = '时间段开始时间不能大于结束时间！';
+								$scope.settings.checkFlag = false;
+								$scope.settings.durationDay=0;
+								break;
+							}else if(beginMonth !=endMonth || (flag && beginMonth2!=beginMonth)){
+								errString = '不能跨月';
+								$scope.settings.checkFlag = false;
+								$scope.settings.durationDay=0;
+								break;
+							}
+						}
+					}
+					if ($scope.settings.remark == '') {
+						errString = '必填项不能为空';
+						$scope.settings.checkFlag = false;
+						break;
+					}
+					if ($scope.settings.title =='外勤' && $scope.settings.attendanceType == '') {
+						errString = '必填项不能为空';
+						$scope.settings.checkFlag = false;
+						break;
+					}
+				}
+			});
+			if($scope.settings.checkFlag){
+				$scope.settings.isSubmiting = true;
+				approvalProcessFactory.newApproval(_data).then(function(data) {  //save
+					if (data.status == 0) {
+						messageFactory.successMsg("新建审批申请成功");
+						$location.search('flowId', null);
+						$location.search('isEdit', null);
+						$location.search('procInstId', data.object);
+						$window.location.reload();
+					} else {
+						messageFactory.errorMsg(data.message);
+					}
+					$scope.settings.isSubmiting = false;
+				});
+			}else{
+				messageFactory.errorMsg(errString);
+				$scope.settings.isSubmiting = false;
+				return;
+			}
+		}
+	};
+
+	$scope.init = function() {
+		//部门员工
+		approvalProcessFactory.getWorkFlowDeptEmp().then(function(data) {
+			$scope.settings.deptAndEmp = data;
+			$scope.settings.deptName = $scope.settings.deptAndEmp[0].deptName;
+			$scope.settings.employeeName = $scope.settings.deptAndEmp[0].name;
+		});
+		if ($scope.settings.isAddMode || $scope.isEdit) {
+			approvalProcessFactory.checkApplyFlow($scope.settings.flowId).then(function(data) {
+				if(data.status == 0){
+					$scope.settings.checkFlowDataFlag = true;
+					approvalProcessFactory.getNewApData($scope.settings.flowId).then(function(data) {
+						console.log(data);
+						$scope.settings.title = data.flow.flowName;
+						$scope.settings.auditType = data.flow.auditType;
+						$scope.settings.allowManyDateSegment =  data.flow.allowManyDateSegment;
+						$scope.settings.flowData = data;
+						$scope.settings.attachments = data.attachmentsList; //附件
+						if (data.itemList) {
+							$scope.settings.detailList = data.itemList;
+							$scope.settings.detailTimeList = [];
+							$scope.settings.detailTimeList.push(data.itemList[0]);
+							$scope.settings.detailTimeListDefault = angular.copy(data.itemList[0]);
+						}
+					});
+
+					//外勤打卡类型
+					approvalProcessFactory.getAttendanceType().then(function(data) {
+						$scope.settings.attendanceTypes = data;
+					});
+				}else{
+					$scope.settings.checkFlowDataFlag = false;
+					$scope.settings.checkFlowDataMsg = data.message;
+				}
+			});
+		} else {
+			$scope.settings.checkFlowDataFlag = true;
+			approvalProcessFactory.getApItem($scope.settings.procInstId).then(function(data) {
+				$scope.settings.title = data.businessType;
+				$scope.settings.deptName = data.deptName;
+				$scope.settings.employeeName = data.employeeName;
+				$scope.settings.remark = data.remark;
+				$scope.settings.attendanceType = data.punchType;
+				$scope.settings.flowData = data;
+				$scope.settings.attachments = data.attachmentsList; //附件
+				if (data.kqItemList) {
+					data.kqItemList.forEach(function(item) {
+						if(item.contentType == 2){
+							item.beginTime = item.beginTime.substring(0,2)+'时';
+							item.endTime = item.endTime.substring(0,2)+'时';
+						}
+						$scope.settings.detailList.push(item);
+					});
+				}
+			});
+			approvalProcessFactory.getProcessTaskList($scope.settings.procInstId).then(function(data) {
+				$scope.settings.taskList = data;
+			});
+		}
+	};
+
+	//员工姓名改变 显示相应部门
+	$scope.nameArray = [];
+	$scope.deptNameArray = [];
+	$scope.changeCreateName = function(){
+		for(var i=0;i<$scope.settings.deptAndEmp.length;i++){
+			$scope.nameArray.push($scope.settings.deptAndEmp[i].name);
+			$scope.deptNameArray.push($scope.settings.deptAndEmp[i].deptName);
+		}
+		var nameIndex  =$scope.nameArray.indexOf($scope.settings.employeeName);
+		$scope.settings.deptName = $scope.deptNameArray[nameIndex];
+	};
+
+	//外勤类型改变 获取对应类型的id
+	$scope.typeArray = [];
+	$scope.attTypeIdArray = [];
+	$scope.changeAttendanceType = function(){
+		for(var i=0;i<$scope.settings.attendanceTypes.length;i++){
+			$scope.typeArray.push($scope.settings.attendanceTypes[i].punchType);
+			$scope.attTypeIdArray.push($scope.settings.attendanceTypes[i].attendTypeId);
+		}
+		var nameIndex  =$scope.typeArray.indexOf($scope.settings.attendanceType);
+		$scope.settings.attendTypeId = $scope.attTypeIdArray[nameIndex];
+	};
+
+	//计算天数
+	$scope.calTotalDay = function(){
+		//var e  = $event.target;
+		var _data = {},
+			_list,errStr,checkFlag=true;
+		var beginDate2,endDate2,beginTime2,endTime2,beginMonth2,endMonth2,beginMonth,endMonth,flag=true;
+		_list = angular.copy($scope.settings.detailTimeList).filter(function(item) {
+			return item.itemName;
+		});
+		_list.forEach(function(item, index) {
+			if (item.itemName) {
+				var _str = "flowinstance.kqItemList[" + index + "].";
+				_data[_str + "contentType"] = item.contentType;
+				_data[_str + "beginDate"] = item.beginDate;
+				_data[_str + "endDate"] = item.endDate;
+				if(item.contentType == 2){
+					_data[_str + "beginTime"] = item.beginTime.substring(-1,2)+':00';
+					_data[_str + "endTime"] = item.endTime.substring(-1,2)+':00';
+				}else{
+					_data[_str + "beginTime"] = item.beginTime;
+					_data[_str + "endTime"] = item.endTime;
+				}
+			}
+
+			beginMonth=new Date(item.beginDate).getMonth();
+			endMonth=new Date(item.endDate).getMonth();
+			for(var j=index;j<$scope.settings.detailTimeList.length;j++) {
+				if(j<$scope.settings.detailTimeList.length-1){
+					flag=true;
+					beginDate2 = $scope.settings.detailTimeList[j+1].beginDate;
+					endDate2 = $scope.settings.detailTimeList[j+1].endDate;
+					beginTime2 = $scope.settings.detailTimeList[j+1].beginTime;
+					endTime2 = $scope.settings.detailTimeList[j+1].endTime;
+					//获取月份
+					beginMonth2=new Date(beginDate2).getMonth();
+				}else{
+					flag=false;
+				}
+
+
+				if (item.contentType == 1) {
+					if (item.beginTime > item.endTime) {
+						errStr = '时间段开始时间不能大于结束时间！';
+						checkFlag = false;
+						break;
+					} else if (flag && item.beginDate == beginDate2) {
+						if ((item.endTime >= beginTime2 && item.beginTime <= beginTime2)||(item.endTime>=endTime2 && item.beginTime<=endTime2)||(item.beginTime > beginTime2 && item.beginTime < endTime2)||(item.endTime>=beginTime2 && item.endTime<endTime2)) {
+							errStr = '时间段不能重叠，且每个时间段开始时间不得大于结束时间！';
+							checkFlag = false;
+							break;
+						}
+					}else if(flag && beginMonth2!=beginMonth){
+						errStr = '不能跨月';
+						checkFlag = false;
+						break;
+					}
+				}else if (item.contentType == 2) {
+					var beginTime = parseInt(item.beginTime.match(/(\S*)时/)[1]);
+					var endTime = parseInt(item.endTime.match(/(\S*)时/)[1]);
+					if (beginTime > endTime) {
+						errStr = '时间段开始时间不能大于结束时间！';
+						checkFlag = false;
+						break;
+					}else if (flag && item.beginDate == beginDate2) {
+						if ((endTime > parseInt(beginTime2.match(/(\S*)时/)[1]) && beginTime <= parseInt(beginTime2.match(/(\S*)时/)[1]))||(endTime > parseInt(endTime2.match(/(\S*)时/)[1]) && beginTime < parseInt(endTime2.match(/(\S*)时/)[1]))||(endTime > parseInt(beginTime2.match(/(\S*)时/)[1]) && endTime < parseInt(endTime2.match(/(\S*)时/)[1]))||(beginTime > parseInt(endTime2.match(/(\S*)时/)[1]) && beginTime < parseInt(endTime2.match(/(\S*)时/)[1]))) {
+							errStr = '时间段之间不能重叠，且每个时间段开始时间不能大于结束时间！';
+							checkFlag = false;
+							break;
+						}
+					}else if(flag && beginMonth2!=beginMonth){
+						errStr = '不能跨月';
+						checkFlag = false;
+						break;
+					}
+				}else if (item.contentType == 3) {
+					if ((item.beginDate > item.endDate)||(item.beginDate == item.endDate && item.beginTime > item.endTime)) {
+						errStr = '时间段开始时间不能大于结束时间！';
+						checkFlag = false;
+						break;
+					} else if(flag && ((item.beginDate == beginDate2 && item.beginTime > endTime2)||(item.beginDate < beginDate2 && item.endDate > beginDate2)||(item.beginDate < endDate2 && item.endDate > endDate2) || (item.beginDate > beginDate2 && item.beginDate < endDate2)||(item.endDate > beginDate2 && item.endDate < endDate2) || (item.beginDate == beginDate2 && ((item.beginTime == beginTime2)||(item.beginTime > beginTime2 && endTime2!=beginTime2)||(item.beginTime < beginTime2 && item.beginTime!=item.endTime)))||(item.endDate == beginDate2 && item.endTime >= beginTime2 && item.beginTime<=endTime2)||(item.beginDate>beginDate2 && item.beginDate==endDate2 && item.beginTime<=endTime2))) {
+						errStr = '时间段之间不能重叠，且每个时间段开始时间不能大于结束时间！';
+						checkFlag = false;
+						break;
+					}else if(beginMonth !=endMonth || (flag && beginMonth2!=beginMonth)){
+						errStr = '不能跨月';
+						checkFlag = false;
+						break;
+					}
+				}else if (item.contentType == 4) {
+					if (item.beginDate > item.endDate) {
+						errStr = '时间段开始时间不能大于结束时间！';
+						checkFlag = false;
+						break;
+					}else if(flag && ((item.beginDate <= beginDate2 && item.endDate >= beginDate2)||(item.beginDate <= endDate2 && item.endDate >=endDate2)||(item.beginDate > beginDate2 && item.beginDate < endDate2)||(item.endDate > beginDate2 && item.endDate < endDate2))){
+						errStr = '时间段之间不能重叠，且每个时间段开始时间不能大于结束时间！';
+						checkFlag = false;
+						break;
+					}else if(beginMonth !=endMonth || (flag && beginMonth2!=beginMonth)){
+						errStr = '不能跨月';
+						checkFlag = false;
+						break;
+					}
+				}else if (item.contentType == 5) {
+					if (item.endDate) {
+						if (item.beginDate > item.endDate) {
+							errStr = '时间段开始时间不能大于结束时间！';
+							checkFlag = false;
+							break;
+						}else if(beginMonth !=endMonth || (flag && beginMonth2!=beginMonth)){
+							errStr = '不能跨月';
+							checkFlag = false;
+							break;
+						}
+					}
+				}
+			}
+		});
+		if ($scope.settings.isAddMode || $scope.isEdit) {
+			if(checkFlag){
+				approvalProcessFactory.getTotalDay(_data).then(function (data) {
+					$scope.settings.duration = data.duration;
+					$scope.settings.durationDay = data.durationDay;
+				});
+			}else{
+				messageFactory.errorMsg(errStr);
+				$scope.settings.durationDay=0;
+				$scope.settings.isSubmiting = false;
+				return;
+			}
+		}
+	};
+	$scope.clockcount=function(){
+		var _data = {},
+			_list;
+		permissionFactory.getCurrentUser().then(function(data) {
+			_data["flowinstance.deptId"] = data.deptId;
+			_data["flowinstance.deptUuid"] = data.deptUuid;
+			_data["flowinstance.deptName"] = data.deptName;
+			_data["flowinstance.employeeId"] = data.employeeId;
+			_data["flowinstance.employeeUuid"] = data.employeeUuid;
+		})
+		_data["flowinstance.businessType"] = $scope.settings.title;
+		_list = angular.copy($scope.settings.detailTimeList).filter(function(item) {
+			return item.itemName;
+		});
+		_list.forEach(function(item, index) {
+			if (item.itemName) {
+				var _str = "flowinstance.kqItemList[" + index + "].";
+				_data[_str + "beginDate"] = item.beginDate;
+				_data[_str + "endDate"] = item.endDate;
+			}
+		})
+		approvalProcessFactory.clockcount(_data).then(function(data) {
+			$scope.clcount = data;
+		});
+	}
+	$timeout(function(){
+		if ($scope.settings.isAddMode) {
+			$scope.calTotalDay();
+			$scope.clockcount();
+		}
+	},1000);
+
+	//添加时间段
+	$scope.addTimeDom = function(){
+
+		$scope.settings.detailTimeList.push(angular.copy($scope.settings.detailTimeList[0]));
+		console.log('i');
+		console.log($scope.settings.detailTimeList.length);
+		$scope.settings.addFlag=[];
+		for(var i=0;i<$scope.settings.detailTimeList.length;i++){
+			$scope.settings.addFlag.push(i >= 1);
+		}
+		//$scope.calTotalDay();
+	};
+
+	//删除时间段
+	$scope.deleteItem = function(index){
+		$scope.settings.detailTimeList.splice(index,1);
+		$scope.settings.addFlag.splice(index,1);
+		$scope.calTotalDay();
+	}
+	$scope.init();
+	$rootScope.$emit("updateTitleEvent", $scope.pageHeaderData[3].text + '_人事OA');
+});
+
+approvalProcessModule.controller('approvalDetailController', function ($rootScope, $scope, $window, $http, $filter, $location, messageFactory, commonDlgService, approvalProcessFactory, apDlgService, permissionFactory, commonFactory, commonDlgService) {
+	$scope.settings = {
+		flowId : $location.search()['flowId'],
+		procInstId: $location.search()['procInstId'],
+		procDefId: $location.search()['procDefId'],
+		isAddMode: angular.isDefined($location.search()['flowId']) && $location.search()['isEdit']!='true',
+		title: "",
+		isSubmiting: false,
+		empName: "",
+		writeTime: "",
+		detailList: [],
+		attachments: [],
+		taskList: [],
+		commentIsOk: "true",
+		flowData: {},
+		checkFlowDataFlag:false,
+		checkFlowDataMsg:'',
+		disabledFlag:true,
+		checkFlag : true,
+		auditType : ''
+	};
+	$scope.comment = {
+		taskId: $location.search()['taskId'],
+		processInstanceId: $location.search()['procInstId'],
+		message: ""
+	};
+
+	$scope.isEdit = $location.search()['isEdit']=='true';
+	$scope.init = function() {
+		approvalProcessFactory.getAuditType($scope.settings.flowId,$scope.settings.procInstId).then(function(data) {
+			if(data.status == 0){
+				$scope.settings.auditType = data.object;
+			}
+		});
+	};
+
+	$scope.init();
+});

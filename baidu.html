@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        table{border-collapse: collapse;width: 100%;}
+        table tr td,th{border: 1px solid #ddd;min-width:100px;}
+        .dtb{width: 100%;display: table;}
+
+        .dtc{display: table-cell}
+    </style>
+</head>
+
+<body>
+    <div style="width:1000px;margin:0 auto;" ng-controller="Ctrl">
+        <button type="button" ng-click="status=!status;">点击</button>
+        <div class="dtb">
+            <div class="dtc" style="width:300px;">
+                <table>
+                    <tr>
+                        <th ng-if="status">姓名</th>
+                        <th>年龄</th>
+                        <th>地址</th>
+                    </tr>
+                    <tr>
+                        <td ng-if="status">程文</td>
+                        <td>23</td>
+                        <td>浦东新区</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="dtc" style="overflow:auto;max-width:700px;">
+                <table>
+                    <tr>
+                        <th ng-repeat="i in title">{{i}}</th>
+                    </tr>
+                    <tr ng-repeat="item in list track by $index">
+                        <td ng-repeat="a in item track by $index">{{a}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="js/angular.js"></script>
+<script>
+    var app = angular.module('app',[]);
+    app.controller('Ctrl',function($scope){
+        $scope.status=false;
+        $scope.title = []
+        $scope.list = []
+        for(var i=0;i<30;i++){
+            $scope.title.push(i)
+        }
+        for(var i=0;i<100;i++){
+            $scope.list.push($scope.title);
+        }
+        console.log($scope.list)
+        console.log($scope.title)
+    })
+</script>
+</html>

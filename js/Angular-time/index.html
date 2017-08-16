@@ -1,0 +1,97 @@
+<style>
+    .Date{width:217px;height:193px;padding:5px;border:1px solid #ddd;}
+    .HoverHide{position: absolute;left: -1px;width: 100px;border: 1px solid #ddd;background: white;top: 24px;font-size: 12px;}
+    .HoverHide ul{padding: 0;margin: 0;overflow: hidden;}
+    .HoverHide p{margin-bottom: 0;text-align: center;}
+    .HoverHide ul li{list-style-type: none;float: left;width: 49px;padding: 5px 0;text-align: center;cursor: pointer;}
+    .HoverHide ul li:hover{background: seagreen;color: white;}
+    .dtb{display:table-cell}
+    .dib{display:inline-block}
+    .date-top{height: 22px;}
+    .date-lyout{border:1px solid #ddd;margin: 5px 0;}
+    .date-lyout-header{font-size: 0;}
+    .date-lyout .date-lyout-header .headerDiv{display: inline-block;width:30px;border:1px solid #ddd;text-align: center;margin-left: -1px;font-size: 12px;border-top: 0;line-height: 20px;}
+    .days-lyout{border:1px solid #ddd;text-align: center;font-size: 12px;line-height: 20px;cursor: pointer;}
+    .days-lyout:hover{background: seagreen;color: white;}
+    .def_Click{background: seagreen;color: white;}
+    .date-footer{text-align: right;}
+    .date-days{margin: -1px;}
+    .date-days table{width: 100%;}
+    .date-footer a{color: #333;font-size: 12px;padding: 4px 10px;border:1px solid #ddd;}
+    .date-top .dib{width: 100px;}
+    .date-top-lyout{display:table;width:100%;border:1px solid #c6c6c6;position: relative;}
+    .font-left{width: 20px;border-right: 1px solid #c6c6c6;text-align: center;}
+    .font-right{width: 20px;border-left: 1px solid #c6c6c6;text-align: center;}
+    .font-left a{display:inline-block;width:0;height:0;border-top:5px solid transparent;border-right:10px solid #333;border-bottom:5px solid transparent}
+    .font-right a{display:inline-block;width:0;height:0;border-top:5px solid transparent;border-left:10px solid #333;border-bottom:5px solid transparent}
+    .font-bottom{display:inline-block;width:0;height:0;border-left:5px solid transparent;border-top:10px solid #333;border-right:5px solid transparent;cursor: pointer;}
+    .font-top{display:inline-block;width:0;height:0;border-left:5px solid transparent;border-bottom:10px solid #333;border-right:5px solid transparent;cursor: pointer;}
+</style>
+<input type="text" ng-model="Date.str">
+<div class="Date">
+    <div class="date-top">
+        <div class="dib pull-left">
+            <div class="date-top-lyout">
+                <div class="font-left dtb">
+                    <a href="javascript:;" ng-click="Del('year')"></a>
+                </div>
+                <div class="date-year text-center dtb" ng-click="YearStatus=true">
+                    {{Date.year}}
+                    <i class="font-bottom"></i>
+                </div>
+                <div class="font-right dtb">
+                    <a href="javascript:;" ng-click="Add('year')"></a>
+                </div>
+                <div class="HoverHide" ng-if="YearStatus" >
+                     <p><span class="font-top" ng-click="DelYearI()"></span><a style="position:absolute;top:0px;right:5px;" href="javascript:;" ng-click="CloseYear()">关闭</a></q></p>
+                    <ul>
+                        <li ng-class="{true:'def_Click'}[item==Date.year]" ng-click="ChangeYear(item)" ng-repeat="item in year[year_i]">{{item+'年'}}</li>
+                    </ul>
+                    <p><span class="font-bottom" ng-click="AddYearI()"></span></p>
+                </div>
+            </div>
+        </div>
+        <div class="dib pull-right">
+            <div class="date-top-lyout">
+                <div class="font-left dtb">
+                    <a href="javascript:;" ng-click="Del('month')"></a>
+                </div>
+                <div class="date-mouth text-center dtb" ng-click="MonStatus=true">
+                    {{Date.month.Value+'月'}}
+                    <i class="font-bottom"></i>
+                </div>
+                <div class="font-right dtb">
+                    <a href="javascript:;" ng-click="Add('month')"></a>
+                </div>
+                <div class="HoverHide" ng-if="MonStatus">
+                    <ul>
+                        <li ng-class="{true:'def_Click'}[item==Date.month]" ng-click="ChangeMonth(item)" ng-repeat="item in month">{{item+'月'}}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="date-lyout">
+        <div class="date-lyout-header">
+            <div class="headerDiv" >日</div>
+            <div class="headerDiv" >一</div>
+            <div class="headerDiv" >二</div>
+            <div class="headerDiv" >三</div>
+            <div class="headerDiv" >四</div>
+            <div class="headerDiv" >五</div>
+            <div style="border-right:0;" class="headerDiv" >六</div>
+        </div>
+        <div class="date-days">
+            <table>
+                <tr ng-repeat="item in day">
+                    <td class="days-lyout" ng-class="{true:'def_Click'}[list==Date.day.Value]" ng-repeat="list in item" >{{list}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="date-footer">
+        <a href="javascript:;" class="DateBtn">清空</a>
+        <a href="javascript:;" ng-click="today()" class="DateBtn">今天</a>
+        <a href="javascript:;" class="DateBtn">确认</a>
+    </div>
+</div>

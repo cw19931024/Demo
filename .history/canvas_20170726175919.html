@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+        <meta name="viewport" context="width=device-width, initial-scale=1">
+        <style>
+            canvas{margin: 0 auto;border: 1px solid #ddd;width: 1024px; height:400px;}
+            .tac{text-align: center;}
+        </style>
+    </head>
+    <body>
+        <div class="tac">
+            <canvas id="canvas" width="1024" height="768"></canvas>
+        </div>
+    </body>
+    <script>
+        var canvas = document.getElementById('canvas');
+        var context =canvas.getContext('2d');
+        var width = canvas.width;
+        var height =canvas.height;
+        var padding = 10;
+
+        //y轴线
+        context.beginPath();
+        context.lineWidth=1;
+        context.moveTo(padding+0.5,height - padding+10);
+        context.lineTo(padding+0.5,padding -10);
+        context.stroke();
+        
+        //x轴线
+        context.moveTo(padding + 0.5,height -padding+10);
+        context.lineTo(width -padding + 0.5,height-padding-10)
+        
+        context.moveTo(padding + 0.5,padding+10);
+        context.lineTo(width -padding + 0.5,padding+10)
+        context.stroke();
+        
+        var Number = 5;             //y轴的段数
+        var yLength = Math.floor(height -padding*2/Number);
+        var xLength = Math.floor(width -padding*2/data.length);
+
+        
+    </script>
+</html>

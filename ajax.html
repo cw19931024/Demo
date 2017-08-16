@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .dtb{
+            display: table;
+            width: 500px;
+            border:1px solid #ddd;
+        }
+        .dtc{
+            display: table-cell;
+        }
+        .dtw{
+            display: table-row;
+        }
+    </style>
+</head>
+
+<body ng-controller="Ctrl">
+    <div class="dtb" ng-repeat="item in list">
+        <div class="dtc">{{item.name}}</div>
+        <div class="dtc">操作</div>
+        <div class="dtw" ng-repeat="data in item.children">
+            <div class="dtc">{{data.name}}</div>
+            <div class="dtc">操作</div>
+        </div>
+    </div>
+</body>
+<script src="js/angular.js"></script>
+<script>
+    var app = angular.module('app', []);
+    app.controller('Ctrl', function ($scope) {
+        $scope.list = [
+            {
+                "name": "水果",
+                "id": 10,
+                "children": [
+                    {
+                        "name": "水果1",
+                        "id": 20
+                    }
+                ]
+            },
+            {
+                "name": "水果",
+                "id": 10,
+                "children": [
+                    {
+                        "name": "水果1",
+                        "id": 20
+                    }
+                ]
+            },
+            {
+                "name": "水果",
+                "id": 10,
+                "children": [
+                    {
+                        "name": "水果1",
+                        "id": 20
+                    }
+                ]
+            },
+            {
+                "name": "水果",
+                "id": 10,
+                "children": [
+                    {
+                        "name": "水果1",
+                        "id": 20
+                    }
+                ]
+            },
+            {
+                "name": "水果",
+                "id": 10,
+                "children": [
+                    {
+                        "name": "水果1",
+                        "id": 20
+                    }
+                ]
+            },
+            {
+                "name": "水果",
+                "id": 10,
+                "children": [
+                    {
+                        "name": "水果1",
+                        "id": 20
+                    }
+                ]
+            }
+        ]
+    })
+</script>
+
+</html>

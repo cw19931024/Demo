@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <style>
+        *{padding: 0;margin: 0;}
+        html,body{height: 100%;}
+        .container{width: 1000px;margin: 0 auto;min-height: 100%;border:1px solid #ddd;padding: 10px;box-sizing: border-box;overflow: hidden;}
+        .container #content{min-height: 100px;border:1px solid #ccc;width: calc(100% - 200px);float: left;}
+        .container .input{width: 100px;border:1px solid #ddd;min-height: 100%;float: left;}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="input"></div>
+        <div id="content" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        <div class="input"></div>
+    </div>
+</body>
+ <script type="text/javascript">
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+        function drop(ev) {
+            ev.preventDefault();
+            ev.target.appendChild(document.getElementById('drag1'));
+        }
+    </script>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" context="width=device-width, initial-scale=1">
+    <style>
+        canvas {
+            margin: 0 auto;
+            border: 1px solid red;
+            width: 1024px;
+            height: 500px;
+        }
+
+        .tac {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="tac">
+        <canvas id="canvas" width="1024" height="500"></canvas>
+    </div>
+</body>
+<script>
+    var canvas = document.getElementById('canvas');
+    var context = canvas.getContext('2d');
+    var width = canvas.width;
+    var height = canvas.height;
+    var padding = 10;
+    context.beginPath();
+    context.fillStyle='#ddd';
+    context.fillRect(10,10,200,height-20)
+    context.stroke();
+
+    context.beginPath();
+    context.fillStyle='#ddd';
+    context.lineWidth=10;
+    context.strokeRect(220,10,width-250,height-25)
+    context.stroke();
+
+    // //y轴线
+    // context.beginPath();
+    // context.lineWidth = 1;
+    // context.moveTo(padding + 0.5, height - padding - 10);
+    // context.lineTo(padding + 0.5, padding + 10);
+    // context.stroke();
+
+    // //x轴线
+    // context.beginPath();
+    // context.moveTo(padding, height - padding - 10);
+    // context.lineTo(width - padding-5, height - padding - 10)
+    // context.moveTo(padding, padding + 10);
+    // context.lineTo(width - padding-5, padding + 10)
+    // context.stroke();
+
+    // var Number = 5;             //y轴的段数
+    // var yLength = Math.floor(height -padding*2/Number);
+    // var xLength = Math.floor(width -padding*2/data.length);
+
+    // for (var i = 20; i < width; i += 20) {
+    //     context.beginPath();
+    //     context.moveTo(i + 10, height - padding - 10);
+    //     context.lineTo(i + 10, padding + 10);
+    //     context.stroke();
+    // }
+    
+    // for (var i = 20; i < height; i += 30) {
+    //     if((i+60)<height){
+    //         context.beginPath();
+    //         context.moveTo(10,i+30);
+    //         context.lineTo(width-15,i+30)
+    //         context.stroke();
+    //     }
+    // }
+</script>
+
+</html>

@@ -1,0 +1,1679 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    
+    <style>
+        th,td{
+            border:1px solid #ddd;
+        }
+    </style>
+    <title>Document</title>
+</head>
+<body ng-controller="Ctrl">
+    <div class="controller">
+        <table class="table table-hover table-border">
+            <tr>
+                <th>单元字典</th>
+                <th>栋座</th>
+                <th>单元</th>
+                <th>层数</th>
+                <th ng-repeat="item in list.roomNoSet">{{item}}</th>
+            </tr>
+            <tr ng-repeat="item in list.result">
+                <td>{{item.estateName}}</td>
+                <td>{{item.buildingName}}</td>
+                <td>{{item.unitName}}</td>
+                <td>{{item.floor}}层</td>
+                <td ng-repeat="set in list.roomNoSet">
+                    <div ng-if="item[set].length<2" ng-repeat="a in item[set]">{{a.roomNo}}</div>
+                    <div ng-if="item[set].length>1"><a href="javascript:;" ng-click="sel(item[set])">{{item[set].length}}</a>套</div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+<script src="js/angular.js"></script>
+<script>
+    var app = angular.module('app',[]);
+    app.controller("Ctrl",function($scope){
+        $scope.title = ['楼盘字典','栋座','单元','层数','01','02','03','04','05'];
+
+        $scope.sel = function(list){
+            console.log(list)
+        }
+
+        $scope.list = {
+    "result": [
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 11,
+        "buildingName": "03号",
+        "unitName": "",
+        "estateId": 1960,
+        "01": [
+          {
+            "deleted": false,
+            "createdTimeStr": "",
+            "updatedTimeStr": "",
+            "tradeType": "出售",
+            "tradeStatus": "无效",
+            "followSplitHistory": false,
+            "selectWrittenFollow": true,
+            "searchFollowFromDb": false,
+            "propertyId": 408569,
+            "propertyNo": "MG30005400",
+            "sellPrice": 0.0,
+            "rentPrice": 0.0,
+            "clickCount": 0,
+            "estateId": 1960,
+            "buildingName": "03号",
+            "unitName": "",
+            "floor": 11,
+            "roomNo": "1101",
+            "rightsInterestsList": [
+              
+            ],
+            "effectiveAudit": 0,
+            "auditDateStr": "",
+            "estateName": "源浦秀苑1",
+            "lookPhoto": false,
+            "handOverDateString": "",
+            "dueTimeString": "",
+            "buyTimeString": "",
+            "lastFollowDateStr": ""
+          }
+        ],
+        "list":[
+            {
+            "name":'03',
+            "deleted": false,
+            "createdTimeStr": "",
+            "updatedTimeStr": "",
+            "tradeType": "出售",
+            "tradeStatus": "无效",
+            "followSplitHistory": false,
+            "selectWrittenFollow": true,
+            "searchFollowFromDb": false,
+            "propertyId": 408569,
+            "propertyNo": "MG30005400",
+            "sellPrice": 0.0,
+            "rentPrice": 0.0,
+            "clickCount": 0,
+            "estateId": 1960,
+            "buildingName": "03号",
+            "unitName": "",
+            "floor": 11,
+            "roomNo": "1101",
+            "rightsInterestsList": [
+              
+            ],
+            "effectiveAudit": 0,
+            "auditDateStr": "",
+            "estateName": "源浦秀苑1",
+            "lookPhoto": false,
+            "handOverDateString": "",
+            "dueTimeString": "",
+            "buyTimeString": "",
+            "lastFollowDateStr": ""
+          }
+        ]
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 10,
+        "buildingName": "03号",
+        "unitName": "",
+        "estateId": 1960
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 9,
+        "buildingName": "03号",
+        "unitName": "",
+        "estateId": 1960
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 8,
+        "buildingName": "03号",
+        "unitName": "",
+        "estateId": 1960
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 7,
+        "buildingName": "03号",
+        "unitName": "",
+        "estateId": 1960
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 6,
+        "buildingName": "03号",
+        "unitName": "",
+        "estateId": 1960
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 5,
+        "buildingName": "03号",
+        "unitName": "",
+        "estateId": 1960
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 4,
+        "buildingName": "03号",
+        "unitName": "",
+        "estateId": 1960
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 3,
+        "buildingName": "03号",
+        "unitName": "",
+        "estateId": 1960
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 2,
+        "buildingName": "03号",
+        "unitName": "",
+        "estateId": 1960
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 1,
+        "buildingName": "03号",
+        "unitName": "",
+        "C": [
+          {
+            "deleted": false,
+            "createdTimeStr": "",
+            "updatedTimeStr": "",
+            "tradeType": "出租",
+            "tradeStatus": "有效",
+            "followSplitHistory": false,
+            "selectWrittenFollow": true,
+            "searchFollowFromDb": false,
+            "propertyId": 490792,
+            "propertyNo": "XT0013253",
+            "sellPrice": 0.0,
+            "rentPrice": 0.0,
+            "clickCount": 0,
+            "estateId": 1960,
+            "buildingName": "03号",
+            "unitName": "",
+            "floor": 1,
+            "roomNo": "01C",
+            "rightsInterestsList": [
+              
+            ],
+            "effectiveAudit": 0,
+            "auditDateStr": "",
+            "estateName": "源浦秀苑1",
+            "lookPhoto": false,
+            "handOverDateString": "",
+            "dueTimeString": "",
+            "buyTimeString": "",
+            "lastFollowDateStr": ""
+          }
+        ],
+        "estateId": 1960,
+        "01": [
+          {
+            "deleted": false,
+            "createdTimeStr": "",
+            "updatedTimeStr": "",
+            "tradeType": "出租",
+            "tradeStatus": "有效",
+            "followSplitHistory": false,
+            "selectWrittenFollow": true,
+            "searchFollowFromDb": false,
+            "propertyId": 490797,
+            "propertyNo": "XT0013263",
+            "sellPrice": 0.0,
+            "rentPrice": 0.0,
+            "clickCount": 0,
+            "estateId": 1960,
+            "buildingName": "03号",
+            "unitName": "",
+            "floor": 1,
+            "roomNo": "0101",
+            "rightsInterestsList": [
+              
+            ],
+            "effectiveAudit": 0,
+            "auditDateStr": "",
+            "estateName": "源浦秀苑1",
+            "lookPhoto": false,
+            "handOverDateString": "",
+            "dueTimeString": "",
+            "buyTimeString": "",
+            "lastFollowDateStr": ""
+          },
+          {
+            "deleted": false,
+            "createdTimeStr": "",
+            "updatedTimeStr": "",
+            "tradeType": "出租",
+            "tradeStatus": "有效",
+            "followSplitHistory": false,
+            "selectWrittenFollow": true,
+            "searchFollowFromDb": false,
+            "propertyId": 490808,
+            "propertyNo": "LJ0000103",
+            "sellPrice": 0.0,
+            "rentPrice": 0.0,
+            "clickCount": 0,
+            "estateId": 1960,
+            "buildingName": "03号",
+            "unitName": "",
+            "floor": 1,
+            "roomNo": "0101",
+            "rightsInterestsList": [
+              
+            ],
+            "effectiveAudit": 0,
+            "auditDateStr": "",
+            "estateName": "源浦秀苑1",
+            "lookPhoto": false,
+            "handOverDateString": "",
+            "dueTimeString": "",
+            "buyTimeString": "",
+            "lastFollowDateStr": ""
+          }
+        ]
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 4,
+        "buildingName": "04号",
+        "unitName": "",
+        "estateId": 1960,
+        "02": [
+          {
+            "deleted": false,
+            "createdTimeStr": "",
+            "updatedTimeStr": "",
+            "tradeType": "出租",
+            "tradeStatus": "未知",
+            "followSplitHistory": false,
+            "selectWrittenFollow": true,
+            "searchFollowFromDb": false,
+            "propertyId": 196223,
+            "propertyNo": "SN2E000346",
+            "sellPrice": 0.0,
+            "rentPrice": 0.0,
+            "clickCount": 0,
+            "estateId": 1960,
+            "buildingName": "04号",
+            "unitName": "",
+            "floor": 4,
+            "roomNo": "0402",
+            "rightsInterestsList": [
+              
+            ],
+            "effectiveAudit": 0,
+            "auditDateStr": "",
+            "estateName": "源浦秀苑1",
+            "lookPhoto": false,
+            "handOverDateString": "",
+            "dueTimeString": "",
+            "buyTimeString": "",
+            "lastFollowDateStr": ""
+          }
+        ]
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 8,
+        "buildingName": "05号",
+        "unitName": "",
+        "estateId": 1960,
+        "01": [
+          {
+            "deleted": false,
+            "createdTimeStr": "",
+            "updatedTimeStr": "",
+            "tradeType": "出租",
+            "tradeStatus": "已租",
+            "followSplitHistory": false,
+            "selectWrittenFollow": true,
+            "searchFollowFromDb": false,
+            "propertyId": 402223,
+            "propertyNo": "UY0002860",
+            "sellPrice": 0.0,
+            "rentPrice": 0.0,
+            "clickCount": 0,
+            "estateId": 1960,
+            "buildingName": "05号",
+            "unitName": "",
+            "floor": 8,
+            "roomNo": "0801",
+            "rightsInterestsList": [
+              
+            ],
+            "effectiveAudit": 0,
+            "auditDateStr": "",
+            "estateName": "源浦秀苑1",
+            "lookPhoto": false,
+            "handOverDateString": "",
+            "dueTimeString": "",
+            "buyTimeString": "",
+            "lastFollowDateStr": ""
+          }
+        ],
+        "02": [
+          {
+            "deleted": false,
+            "createdTimeStr": "",
+            "updatedTimeStr": "",
+            "tradeType": "出租",
+            "tradeStatus": "已租",
+            "followSplitHistory": false,
+            "selectWrittenFollow": true,
+            "searchFollowFromDb": false,
+            "propertyId": 402316,
+            "propertyNo": "LZB0003999",
+            "sellPrice": 0.0,
+            "rentPrice": 0.0,
+            "clickCount": 0,
+            "estateId": 1960,
+            "buildingName": "05号",
+            "unitName": "",
+            "floor": 8,
+            "roomNo": "0802",
+            "rightsInterestsList": [
+              
+            ],
+            "effectiveAudit": 0,
+            "auditDateStr": "",
+            "estateName": "源浦秀苑1",
+            "lookPhoto": false,
+            "handOverDateString": "",
+            "dueTimeString": "",
+            "buyTimeString": "",
+            "lastFollowDateStr": ""
+          }
+        ]
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 7,
+        "buildingName": "05号",
+        "unitName": "",
+        "estateId": 1960
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 6,
+        "buildingName": "05号",
+        "unitName": "",
+        "estateId": 1960
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 5,
+        "buildingName": "05号",
+        "unitName": "",
+        "estateId": 1960
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 4,
+        "buildingName": "05号",
+        "unitName": "",
+        "estateId": 1960
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 3,
+        "buildingName": "05号",
+        "unitName": "",
+        "estateId": 1960,
+        "01": [
+          {
+            "deleted": false,
+            "createdTimeStr": "",
+            "updatedTimeStr": "",
+            "tradeType": "出租",
+            "tradeStatus": "已租",
+            "followSplitHistory": false,
+            "selectWrittenFollow": true,
+            "searchFollowFromDb": false,
+            "propertyId": 398627,
+            "propertyNo": "LZB0003460",
+            "sellPrice": 0.0,
+            "rentPrice": 0.0,
+            "clickCount": 0,
+            "estateId": 1960,
+            "buildingName": "05号",
+            "unitName": "",
+            "floor": 3,
+            "roomNo": "0301",
+            "rightsInterestsList": [
+              
+            ],
+            "effectiveAudit": 0,
+            "auditDateStr": "",
+            "estateName": "源浦秀苑1",
+            "lookPhoto": false,
+            "handOverDateString": "",
+            "dueTimeString": "",
+            "buyTimeString": "",
+            "lastFollowDateStr": ""
+          }
+        ]
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 2,
+        "buildingName": "05号",
+        "unitName": "",
+        "estateId": 1960
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 1,
+        "buildingName": "05号",
+        "unitName": "",
+        "estateId": 1960,
+        "01": [
+          {
+            "deleted": false,
+            "createdTimeStr": "",
+            "updatedTimeStr": "",
+            "tradeType": "出租",
+            "tradeStatus": "已租",
+            "followSplitHistory": false,
+            "selectWrittenFollow": true,
+            "searchFollowFromDb": false,
+            "propertyId": 413926,
+            "propertyNo": "SN0001346",
+            "sellPrice": 0.0,
+            "rentPrice": 0.0,
+            "clickCount": 0,
+            "estateId": 1960,
+            "buildingName": "05号",
+            "unitName": "",
+            "floor": 1,
+            "roomNo": "0101",
+            "rightsInterestsList": [
+              
+            ],
+            "effectiveAudit": 0,
+            "auditDateStr": "",
+            "estateName": "源浦秀苑1",
+            "lookPhoto": false,
+            "handOverDateString": "",
+            "dueTimeString": "",
+            "buyTimeString": "",
+            "lastFollowDateStr": ""
+          }
+        ]
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 11,
+        "buildingName": "06号",
+        "unitName": "",
+        "estateId": 1960,
+        "01": [
+          {
+            "deleted": false,
+            "createdTimeStr": "",
+            "updatedTimeStr": "",
+            "tradeType": "出租",
+            "tradeStatus": "已租",
+            "followSplitHistory": false,
+            "selectWrittenFollow": true,
+            "searchFollowFromDb": false,
+            "propertyId": 195796,
+            "propertyNo": "LZA000119",
+            "sellPrice": 0.0,
+            "rentPrice": 0.0,
+            "clickCount": 0,
+            "estateId": 1960,
+            "buildingName": "06号",
+            "unitName": "",
+            "floor": 11,
+            "roomNo": "1101",
+            "rightsInterestsList": [
+              
+            ],
+            "effectiveAudit": 0,
+            "auditDateStr": "",
+            "estateName": "源浦秀苑1",
+            "lookPhoto": false,
+            "handOverDateString": "",
+            "dueTimeString": "",
+            "buyTimeString": "",
+            "lastFollowDateStr": ""
+          }
+        ]
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 10,
+        "buildingName": "06号",
+        "unitName": "",
+        "estateId": 1960
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 9,
+        "buildingName": "06号",
+        "unitName": "",
+        "estateId": 1960,
+        "02": [
+          {
+            "deleted": false,
+            "createdTimeStr": "",
+            "updatedTimeStr": "",
+            "tradeType": "出租",
+            "tradeStatus": "已租",
+            "followSplitHistory": false,
+            "selectWrittenFollow": true,
+            "searchFollowFromDb": false,
+            "propertyId": 394809,
+            "propertyNo": "LZB0002886",
+            "sellPrice": 0.0,
+            "rentPrice": 0.0,
+            "clickCount": 0,
+            "estateId": 1960,
+            "buildingName": "06号",
+            "unitName": "",
+            "floor": 9,
+            "roomNo": "0902",
+            "rightsInterestsList": [
+              
+            ],
+            "effectiveAudit": 0,
+            "auditDateStr": "",
+            "estateName": "源浦秀苑1",
+            "lookPhoto": false,
+            "handOverDateString": "",
+            "dueTimeString": "",
+            "buyTimeString": "",
+            "lastFollowDateStr": ""
+          }
+        ]
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 8,
+        "buildingName": "06号",
+        "unitName": "",
+        "estateId": 1960
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 7,
+        "buildingName": "06号",
+        "unitName": "",
+        "estateId": 1960,
+        "02": [
+          {
+            "deleted": false,
+            "createdTimeStr": "",
+            "updatedTimeStr": "",
+            "tradeType": "出售",
+            "tradeStatus": "未知",
+            "followSplitHistory": false,
+            "selectWrittenFollow": true,
+            "searchFollowFromDb": false,
+            "propertyId": 480332,
+            "propertyNo": "0T70002131",
+            "sellPrice": 0.0,
+            "rentPrice": 0.0,
+            "clickCount": 0,
+            "estateId": 1960,
+            "buildingName": "06号",
+            "unitName": "",
+            "floor": 7,
+            "roomNo": "0702",
+            "rightsInterestsList": [
+              
+            ],
+            "effectiveAudit": 0,
+            "auditDateStr": "",
+            "estateName": "源浦秀苑1",
+            "lookPhoto": false,
+            "handOverDateString": "",
+            "dueTimeString": "",
+            "buyTimeString": "",
+            "lastFollowDateStr": ""
+          }
+        ]
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 6,
+        "buildingName": "06号",
+        "unitName": "",
+        "estateId": 1960
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 5,
+        "buildingName": "06号",
+        "unitName": "",
+        "estateId": 1960
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 4,
+        "buildingName": "06号",
+        "unitName": "",
+        "estateId": 1960
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 3,
+        "buildingName": "06号",
+        "unitName": "",
+        "estateId": 1960,
+        "01": [
+          {
+            "deleted": false,
+            "createdTimeStr": "",
+            "updatedTimeStr": "",
+            "tradeType": "出售",
+            "tradeStatus": "暂缓",
+            "followSplitHistory": false,
+            "selectWrittenFollow": true,
+            "searchFollowFromDb": false,
+            "propertyId": 463474,
+            "propertyNo": "EZZE0000151",
+            "sellPrice": 0.0,
+            "rentPrice": 0.0,
+            "clickCount": 0,
+            "estateId": 1960,
+            "buildingName": "06号",
+            "unitName": "",
+            "floor": 3,
+            "roomNo": "0301",
+            "rightsInterestsList": [
+              
+            ],
+            "effectiveAudit": 0,
+            "auditDateStr": "",
+            "estateName": "源浦秀苑1",
+            "lookPhoto": false,
+            "handOverDateString": "",
+            "dueTimeString": "",
+            "buyTimeString": "",
+            "lastFollowDateStr": ""
+          }
+        ],
+        "02": [
+          {
+            "deleted": false,
+            "createdTimeStr": "",
+            "updatedTimeStr": "",
+            "tradeType": "出租",
+            "tradeStatus": "已租",
+            "followSplitHistory": false,
+            "selectWrittenFollow": true,
+            "searchFollowFromDb": false,
+            "propertyId": 397568,
+            "propertyNo": "LZE0000213",
+            "sellPrice": 0.0,
+            "rentPrice": 0.0,
+            "clickCount": 0,
+            "estateId": 1960,
+            "buildingName": "06号",
+            "unitName": "",
+            "floor": 3,
+            "roomNo": "0302",
+            "rightsInterestsList": [
+              
+            ],
+            "effectiveAudit": 0,
+            "auditDateStr": "",
+            "estateName": "源浦秀苑1",
+            "lookPhoto": false,
+            "handOverDateString": "",
+            "dueTimeString": "",
+            "buyTimeString": "",
+            "lastFollowDateStr": ""
+          }
+        ],
+        "03": [
+          {
+            "deleted": false,
+            "createdTimeStr": "",
+            "updatedTimeStr": "",
+            "tradeType": "出租",
+            "tradeStatus": "已租",
+            "followSplitHistory": false,
+            "selectWrittenFollow": true,
+            "searchFollowFromDb": false,
+            "propertyId": 392331,
+            "propertyNo": "LZE0000120",
+            "sellPrice": 0.0,
+            "rentPrice": 0.0,
+            "clickCount": 0,
+            "estateId": 1960,
+            "buildingName": "06号",
+            "unitName": "",
+            "floor": 3,
+            "roomNo": "0303",
+            "rightsInterestsList": [
+              
+            ],
+            "effectiveAudit": 0,
+            "auditDateStr": "",
+            "estateName": "源浦秀苑1",
+            "lookPhoto": false,
+            "handOverDateString": "",
+            "dueTimeString": "",
+            "buyTimeString": "",
+            "lastFollowDateStr": ""
+          }
+        ]
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 2,
+        "buildingName": "06号",
+        "unitName": "",
+        "estateId": 1960
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 1,
+        "buildingName": "06号",
+        "unitName": "",
+        "estateId": 1960,
+        "02": [
+          {
+            "deleted": false,
+            "createdTimeStr": "",
+            "updatedTimeStr": "",
+            "tradeType": "出租",
+            "tradeStatus": "已租",
+            "followSplitHistory": false,
+            "selectWrittenFollow": true,
+            "searchFollowFromDb": false,
+            "propertyId": 392832,
+            "propertyNo": "LZA0000154",
+            "sellPrice": 0.0,
+            "rentPrice": 0.0,
+            "clickCount": 0,
+            "estateId": 1960,
+            "buildingName": "06号",
+            "unitName": "",
+            "floor": 1,
+            "roomNo": "0102",
+            "rightsInterestsList": [
+              
+            ],
+            "effectiveAudit": 0,
+            "auditDateStr": "",
+            "estateName": "源浦秀苑1",
+            "lookPhoto": false,
+            "handOverDateString": "",
+            "dueTimeString": "",
+            "buyTimeString": "",
+            "lastFollowDateStr": ""
+          }
+        ]
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 9,
+        "buildingName": "07号",
+        "unitName": "",
+        "estateId": 1960,
+        "01": [
+          {
+            "deleted": false,
+            "createdTimeStr": "",
+            "updatedTimeStr": "",
+            "tradeType": "出租",
+            "tradeStatus": "已租",
+            "followSplitHistory": false,
+            "selectWrittenFollow": true,
+            "searchFollowFromDb": false,
+            "propertyId": 452374,
+            "propertyNo": "SND0018506",
+            "sellPrice": 0.0,
+            "rentPrice": 0.0,
+            "clickCount": 0,
+            "estateId": 1960,
+            "buildingName": "07号",
+            "unitName": "",
+            "floor": 9,
+            "roomNo": "0901",
+            "rightsInterestsList": [
+              
+            ],
+            "effectiveAudit": 0,
+            "auditDateStr": "",
+            "estateName": "源浦秀苑1",
+            "lookPhoto": false,
+            "handOverDateString": "",
+            "dueTimeString": "",
+            "buyTimeString": "",
+            "lastFollowDateStr": ""
+          }
+        ]
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 4,
+        "buildingName": "09号",
+        "unitName": "",
+        "estateId": 1960,
+        "01": [
+          {
+            "deleted": false,
+            "createdTimeStr": "",
+            "updatedTimeStr": "",
+            "tradeType": "出租",
+            "tradeStatus": "已租",
+            "followSplitHistory": false,
+            "selectWrittenFollow": true,
+            "searchFollowFromDb": false,
+            "propertyId": 397180,
+            "propertyNo": "LZB0003265",
+            "sellPrice": 0.0,
+            "rentPrice": 0.0,
+            "clickCount": 0,
+            "estateId": 1960,
+            "buildingName": "09号",
+            "unitName": "",
+            "floor": 4,
+            "roomNo": "0401",
+            "rightsInterestsList": [
+              
+            ],
+            "effectiveAudit": 0,
+            "auditDateStr": "",
+            "estateName": "源浦秀苑1",
+            "lookPhoto": false,
+            "handOverDateString": "",
+            "dueTimeString": "",
+            "buyTimeString": "",
+            "lastFollowDateStr": ""
+          }
+        ]
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 6,
+        "buildingName": "10号",
+        "unitName": "",
+        "estateId": 1960,
+        "02": [
+          {
+            "deleted": false,
+            "createdTimeStr": "",
+            "updatedTimeStr": "",
+            "tradeType": "出租",
+            "tradeStatus": "已租",
+            "followSplitHistory": false,
+            "selectWrittenFollow": true,
+            "searchFollowFromDb": false,
+            "propertyId": 396814,
+            "propertyNo": "LZE0000203",
+            "sellPrice": 0.0,
+            "rentPrice": 0.0,
+            "clickCount": 0,
+            "estateId": 1960,
+            "buildingName": "10号",
+            "unitName": "",
+            "floor": 6,
+            "roomNo": "0602",
+            "rightsInterestsList": [
+              
+            ],
+            "effectiveAudit": 0,
+            "auditDateStr": "",
+            "estateName": "源浦秀苑1",
+            "lookPhoto": false,
+            "handOverDateString": "",
+            "dueTimeString": "",
+            "buyTimeString": "",
+            "lastFollowDateStr": ""
+          }
+        ]
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 5,
+        "buildingName": "10号",
+        "unitName": "",
+        "estateId": 1960
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 4,
+        "buildingName": "10号",
+        "unitName": "",
+        "estateId": 1960,
+        "01": [
+          {
+            "deleted": false,
+            "createdTimeStr": "",
+            "updatedTimeStr": "",
+            "tradeType": "出租",
+            "tradeStatus": "已租",
+            "followSplitHistory": false,
+            "selectWrittenFollow": true,
+            "searchFollowFromDb": false,
+            "propertyId": 195459,
+            "propertyNo": "LZB002298",
+            "sellPrice": 0.0,
+            "rentPrice": 0.0,
+            "clickCount": 0,
+            "estateId": 1960,
+            "buildingName": "10号",
+            "unitName": "",
+            "floor": 4,
+            "roomNo": "0401",
+            "rightsInterestsList": [
+              
+            ],
+            "effectiveAudit": 0,
+            "auditDateStr": "",
+            "estateName": "源浦秀苑1",
+            "lookPhoto": false,
+            "handOverDateString": "",
+            "dueTimeString": "",
+            "buyTimeString": "",
+            "lastFollowDateStr": ""
+          }
+        ]
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 11,
+        "buildingName": "11号",
+        "unitName": "",
+        "estateId": 1960,
+        "01": [
+          {
+            "deleted": false,
+            "createdTimeStr": "",
+            "updatedTimeStr": "",
+            "tradeType": "出租",
+            "tradeStatus": "已租",
+            "followSplitHistory": false,
+            "selectWrittenFollow": true,
+            "searchFollowFromDb": false,
+            "propertyId": 196410,
+            "propertyNo": "SND016436",
+            "sellPrice": 0.0,
+            "rentPrice": 0.0,
+            "clickCount": 0,
+            "estateId": 1960,
+            "buildingName": "11号",
+            "unitName": "",
+            "floor": 11,
+            "roomNo": "1101",
+            "rightsInterestsList": [
+              
+            ],
+            "effectiveAudit": 0,
+            "auditDateStr": "",
+            "estateName": "源浦秀苑1",
+            "lookPhoto": false,
+            "handOverDateString": "",
+            "dueTimeString": "",
+            "buyTimeString": "",
+            "lastFollowDateStr": ""
+          }
+        ],
+        "02": [
+          {
+            "deleted": false,
+            "createdTimeStr": "",
+            "updatedTimeStr": "",
+            "tradeType": "出租",
+            "tradeStatus": "已租",
+            "followSplitHistory": false,
+            "selectWrittenFollow": true,
+            "searchFollowFromDb": false,
+            "propertyId": 196385,
+            "propertyNo": "LZB002159",
+            "sellPrice": 0.0,
+            "rentPrice": 0.0,
+            "clickCount": 0,
+            "estateId": 1960,
+            "buildingName": "11号",
+            "unitName": "",
+            "floor": 11,
+            "roomNo": "1102",
+            "rightsInterestsList": [
+              
+            ],
+            "effectiveAudit": 0,
+            "auditDateStr": "",
+            "estateName": "源浦秀苑1",
+            "lookPhoto": false,
+            "handOverDateString": "",
+            "dueTimeString": "",
+            "buyTimeString": "",
+            "lastFollowDateStr": ""
+          }
+        ]
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 10,
+        "buildingName": "11号",
+        "unitName": "",
+        "estateId": 1960,
+        "02": [
+          {
+            "deleted": false,
+            "createdTimeStr": "",
+            "updatedTimeStr": "",
+            "tradeType": "出租",
+            "tradeStatus": "已租",
+            "followSplitHistory": false,
+            "selectWrittenFollow": true,
+            "searchFollowFromDb": false,
+            "propertyId": 196387,
+            "propertyNo": "LZB002158",
+            "sellPrice": 0.0,
+            "rentPrice": 0.0,
+            "clickCount": 0,
+            "estateId": 1960,
+            "buildingName": "11号",
+            "unitName": "",
+            "floor": 10,
+            "roomNo": "1002",
+            "rightsInterestsList": [
+              
+            ],
+            "effectiveAudit": 0,
+            "auditDateStr": "",
+            "estateName": "源浦秀苑1",
+            "lookPhoto": false,
+            "handOverDateString": "",
+            "dueTimeString": "",
+            "buyTimeString": "",
+            "lastFollowDateStr": ""
+          }
+        ]
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 9,
+        "buildingName": "11号",
+        "unitName": "",
+        "estateId": 1960,
+        "02": [
+          {
+            "deleted": false,
+            "createdTimeStr": "",
+            "updatedTimeStr": "",
+            "tradeType": "出租",
+            "tradeStatus": "已租",
+            "followSplitHistory": false,
+            "selectWrittenFollow": true,
+            "searchFollowFromDb": false,
+            "propertyId": 390131,
+            "propertyNo": "LZE0000105",
+            "sellPrice": 0.0,
+            "rentPrice": 0.0,
+            "clickCount": 0,
+            "estateId": 1960,
+            "buildingName": "11号",
+            "unitName": "",
+            "floor": 9,
+            "roomNo": "0902",
+            "rightsInterestsList": [
+              
+            ],
+            "effectiveAudit": 0,
+            "auditDateStr": "",
+            "estateName": "源浦秀苑1",
+            "lookPhoto": false,
+            "handOverDateString": "",
+            "dueTimeString": "",
+            "buyTimeString": "",
+            "lastFollowDateStr": ""
+          },
+          {
+            "deleted": false,
+            "createdTimeStr": "",
+            "updatedTimeStr": "",
+            "tradeType": "出租",
+            "tradeStatus": "有效",
+            "followSplitHistory": false,
+            "selectWrittenFollow": true,
+            "searchFollowFromDb": false,
+            "propertyId": 394084,
+            "propertyNo": "UY0000196",
+            "sellPrice": 0.0,
+            "rentPrice": 0.0,
+            "clickCount": 0,
+            "estateId": 1960,
+            "buildingName": "11号",
+            "unitName": "",
+            "floor": 9,
+            "roomNo": "0902",
+            "rightsInterestsList": [
+              
+            ],
+            "effectiveAudit": 0,
+            "auditDateStr": "",
+            "estateName": "源浦秀苑1",
+            "lookPhoto": false,
+            "handOverDateString": "",
+            "dueTimeString": "",
+            "buyTimeString": "",
+            "lastFollowDateStr": ""
+          }
+        ]
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 8,
+        "buildingName": "11号",
+        "unitName": "",
+        "estateId": 1960
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 7,
+        "buildingName": "11号",
+        "unitName": "",
+        "estateId": 1960,
+        "02": [
+          {
+            "deleted": false,
+            "createdTimeStr": "",
+            "updatedTimeStr": "",
+            "tradeType": "出租",
+            "tradeStatus": "已租",
+            "followSplitHistory": false,
+            "selectWrittenFollow": true,
+            "searchFollowFromDb": false,
+            "propertyId": 395637,
+            "propertyNo": "LZB0002964",
+            "sellPrice": 0.0,
+            "rentPrice": 0.0,
+            "clickCount": 0,
+            "estateId": 1960,
+            "buildingName": "11号",
+            "unitName": "",
+            "floor": 7,
+            "roomNo": "0702",
+            "rightsInterestsList": [
+              
+            ],
+            "effectiveAudit": 0,
+            "auditDateStr": "",
+            "estateName": "源浦秀苑1",
+            "lookPhoto": false,
+            "handOverDateString": "",
+            "dueTimeString": "",
+            "buyTimeString": "",
+            "lastFollowDateStr": ""
+          }
+        ]
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 6,
+        "buildingName": "11号",
+        "unitName": "",
+        "estateId": 1960
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 5,
+        "buildingName": "11号",
+        "unitName": "",
+        "estateId": 1960
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 4,
+        "buildingName": "11号",
+        "unitName": "",
+        "estateId": 1960
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 3,
+        "buildingName": "11号",
+        "unitName": "",
+        "estateId": 1960,
+        "01": [
+          {
+            "deleted": false,
+            "createdTimeStr": "",
+            "updatedTimeStr": "",
+            "tradeType": "出租",
+            "tradeStatus": "已租",
+            "followSplitHistory": false,
+            "selectWrittenFollow": true,
+            "searchFollowFromDb": false,
+            "propertyId": 392135,
+            "propertyNo": "SN2D0004824",
+            "sellPrice": 0.0,
+            "rentPrice": 0.0,
+            "clickCount": 0,
+            "estateId": 1960,
+            "buildingName": "11号",
+            "unitName": "",
+            "floor": 3,
+            "roomNo": "0301",
+            "rightsInterestsList": [
+              
+            ],
+            "effectiveAudit": 0,
+            "auditDateStr": "",
+            "estateName": "源浦秀苑1",
+            "lookPhoto": false,
+            "handOverDateString": "",
+            "dueTimeString": "",
+            "buyTimeString": "",
+            "lastFollowDateStr": ""
+          }
+        ]
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 9,
+        "buildingName": "12号",
+        "unitName": "",
+        "estateId": 1960,
+        "01": [
+          {
+            "deleted": false,
+            "createdTimeStr": "",
+            "updatedTimeStr": "",
+            "tradeType": "出租",
+            "tradeStatus": "已租",
+            "followSplitHistory": false,
+            "selectWrittenFollow": true,
+            "searchFollowFromDb": false,
+            "propertyId": 195797,
+            "propertyNo": "LZA000118",
+            "sellPrice": 0.0,
+            "rentPrice": 0.0,
+            "clickCount": 0,
+            "estateId": 1960,
+            "buildingName": "12号",
+            "unitName": "",
+            "floor": 9,
+            "roomNo": "0901",
+            "rightsInterestsList": [
+              
+            ],
+            "effectiveAudit": 0,
+            "auditDateStr": "",
+            "estateName": "源浦秀苑1",
+            "lookPhoto": false,
+            "handOverDateString": "",
+            "dueTimeString": "",
+            "buyTimeString": "",
+            "lastFollowDateStr": ""
+          }
+        ],
+        "02": [
+          {
+            "deleted": false,
+            "createdTimeStr": "",
+            "updatedTimeStr": "",
+            "tradeType": "出租",
+            "tradeStatus": "已租",
+            "followSplitHistory": false,
+            "selectWrittenFollow": true,
+            "searchFollowFromDb": false,
+            "propertyId": 195988,
+            "propertyNo": "SLB011176",
+            "sellPrice": 0.0,
+            "rentPrice": 0.0,
+            "clickCount": 0,
+            "estateId": 1960,
+            "buildingName": "12号",
+            "unitName": "",
+            "floor": 9,
+            "roomNo": "0902",
+            "rightsInterestsList": [
+              
+            ],
+            "effectiveAudit": 0,
+            "auditDateStr": "",
+            "estateName": "源浦秀苑1",
+            "lookPhoto": false,
+            "handOverDateString": "",
+            "dueTimeString": "",
+            "buyTimeString": "",
+            "lastFollowDateStr": ""
+          }
+        ]
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 8,
+        "buildingName": "12号",
+        "unitName": "",
+        "estateId": 1960,
+        "01": [
+          {
+            "deleted": false,
+            "createdTimeStr": "",
+            "updatedTimeStr": "",
+            "tradeType": "出租",
+            "tradeStatus": "已租",
+            "followSplitHistory": false,
+            "selectWrittenFollow": true,
+            "searchFollowFromDb": false,
+            "propertyId": 405943,
+            "propertyNo": "SNC0003345",
+            "sellPrice": 0.0,
+            "rentPrice": 0.0,
+            "clickCount": 0,
+            "estateId": 1960,
+            "buildingName": "12号",
+            "unitName": "",
+            "floor": 8,
+            "roomNo": "0801",
+            "rightsInterestsList": [
+              
+            ],
+            "effectiveAudit": 0,
+            "auditDateStr": "",
+            "estateName": "源浦秀苑1",
+            "lookPhoto": false,
+            "handOverDateString": "",
+            "dueTimeString": "",
+            "buyTimeString": "",
+            "lastFollowDateStr": ""
+          }
+        ]
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 7,
+        "buildingName": "12号",
+        "unitName": "",
+        "estateId": 1960,
+        "02": [
+          {
+            "deleted": false,
+            "createdTimeStr": "",
+            "updatedTimeStr": "",
+            "tradeType": "出租",
+            "tradeStatus": "已租",
+            "followSplitHistory": false,
+            "selectWrittenFollow": true,
+            "searchFollowFromDb": false,
+            "propertyId": 396363,
+            "propertyNo": "LZE0000165",
+            "sellPrice": 0.0,
+            "rentPrice": 0.0,
+            "clickCount": 0,
+            "estateId": 1960,
+            "buildingName": "12号",
+            "unitName": "",
+            "floor": 7,
+            "roomNo": "0702",
+            "rightsInterestsList": [
+              
+            ],
+            "effectiveAudit": 0,
+            "auditDateStr": "",
+            "estateName": "源浦秀苑1",
+            "lookPhoto": false,
+            "handOverDateString": "",
+            "dueTimeString": "",
+            "buyTimeString": "",
+            "lastFollowDateStr": ""
+          }
+        ]
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 6,
+        "buildingName": "12号",
+        "unitName": "",
+        "estateId": 1960
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 5,
+        "buildingName": "12号",
+        "unitName": "",
+        "estateId": 1960
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 4,
+        "buildingName": "12号",
+        "unitName": "",
+        "estateId": 1960,
+        "02": [
+          {
+            "deleted": false,
+            "createdTimeStr": "",
+            "updatedTimeStr": "",
+            "tradeType": "出租",
+            "tradeStatus": "未知",
+            "followSplitHistory": false,
+            "selectWrittenFollow": true,
+            "searchFollowFromDb": false,
+            "propertyId": 196413,
+            "propertyNo": "SN2E000345",
+            "sellPrice": 0.0,
+            "rentPrice": 0.0,
+            "clickCount": 0,
+            "estateId": 1960,
+            "buildingName": "12号",
+            "unitName": "",
+            "floor": 4,
+            "roomNo": "0402",
+            "rightsInterestsList": [
+              
+            ],
+            "effectiveAudit": 0,
+            "auditDateStr": "",
+            "estateName": "源浦秀苑1",
+            "lookPhoto": false,
+            "handOverDateString": "",
+            "dueTimeString": "",
+            "buyTimeString": "",
+            "lastFollowDateStr": ""
+          }
+        ]
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 3,
+        "buildingName": "16号",
+        "unitName": "",
+        "estateId": 1960,
+        "02": [
+          {
+            "deleted": false,
+            "createdTimeStr": "",
+            "updatedTimeStr": "",
+            "tradeType": "出租",
+            "tradeStatus": "有效",
+            "followSplitHistory": false,
+            "selectWrittenFollow": true,
+            "searchFollowFromDb": false,
+            "propertyId": 476245,
+            "propertyNo": "CA30000275",
+            "sellPrice": 0.0,
+            "rentPrice": 0.0,
+            "clickCount": 0,
+            "estateId": 1960,
+            "buildingName": "16号",
+            "unitName": "",
+            "floor": 3,
+            "roomNo": "0302",
+            "rightsInterestsList": [
+              
+            ],
+            "effectiveAudit": 0,
+            "auditDateStr": "",
+            "estateName": "源浦秀苑1",
+            "lookPhoto": false,
+            "handOverDateString": "",
+            "dueTimeString": "",
+            "buyTimeString": "",
+            "lastFollowDateStr": ""
+          }
+        ]
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 3,
+        "buildingName": "17号",
+        "unitName": "",
+        "estateId": 1960,
+        "01": [
+          {
+            "deleted": false,
+            "createdTimeStr": "",
+            "updatedTimeStr": "",
+            "tradeType": "出租",
+            "tradeStatus": "已租",
+            "followSplitHistory": false,
+            "selectWrittenFollow": true,
+            "searchFollowFromDb": false,
+            "propertyId": 196389,
+            "propertyNo": "SLB011129",
+            "sellPrice": 0.0,
+            "rentPrice": 0.0,
+            "clickCount": 0,
+            "estateId": 1960,
+            "buildingName": "17号",
+            "unitName": "",
+            "floor": 3,
+            "roomNo": "0301",
+            "rightsInterestsList": [
+              
+            ],
+            "effectiveAudit": 0,
+            "auditDateStr": "",
+            "estateName": "源浦秀苑1",
+            "lookPhoto": false,
+            "handOverDateString": "",
+            "dueTimeString": "",
+            "buyTimeString": "",
+            "lastFollowDateStr": ""
+          }
+        ]
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 5,
+        "buildingName": "20号",
+        "unitName": "",
+        "estateId": 1960,
+        "01": [
+          {
+            "deleted": false,
+            "createdTimeStr": "",
+            "updatedTimeStr": "",
+            "tradeType": "出租",
+            "tradeStatus": "已租",
+            "followSplitHistory": false,
+            "selectWrittenFollow": true,
+            "searchFollowFromDb": false,
+            "propertyId": 194945,
+            "propertyNo": "LZF000059",
+            "sellPrice": 0.0,
+            "rentPrice": 0.0,
+            "clickCount": 0,
+            "estateId": 1960,
+            "buildingName": "20号",
+            "unitName": "",
+            "floor": 5,
+            "roomNo": "0501",
+            "rightsInterestsList": [
+              
+            ],
+            "effectiveAudit": 0,
+            "auditDateStr": "",
+            "estateName": "源浦秀苑1",
+            "lookPhoto": false,
+            "handOverDateString": "",
+            "dueTimeString": "",
+            "buyTimeString": "",
+            "lastFollowDateStr": ""
+          }
+        ]
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 4,
+        "buildingName": "20号",
+        "unitName": "",
+        "estateId": 1960
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 3,
+        "buildingName": "20号",
+        "unitName": "",
+        "estateId": 1960
+      },
+      {
+        "estateName": "源浦秀苑1",
+        "floor": 2,
+        "buildingName": "20号",
+        "unitName": "",
+        "estateId": 1960,
+        "01": [
+          {
+            "deleted": false,
+            "createdTimeStr": "",
+            "updatedTimeStr": "",
+            "tradeType": "出租",
+            "tradeStatus": "已租",
+            "followSplitHistory": false,
+            "selectWrittenFollow": true,
+            "searchFollowFromDb": false,
+            "propertyId": 391379,
+            "propertyNo": "LZB0002486",
+            "sellPrice": 0.0,
+            "rentPrice": 0.0,
+            "clickCount": 0,
+            "estateId": 1960,
+            "buildingName": "20号",
+            "unitName": "",
+            "floor": 2,
+            "roomNo": "0201",
+            "rightsInterestsList": [
+              
+            ],
+            "effectiveAudit": 0,
+            "auditDateStr": "",
+            "estateName": "源浦秀苑1",
+            "lookPhoto": false,
+            "handOverDateString": "",
+            "dueTimeString": "",
+            "buyTimeString": "",
+            "lastFollowDateStr": ""
+          }
+        ]
+      }
+    ],
+    "roomNoSet": [
+      "01",
+      "02",
+      "03",
+      "C"
+    ]
+  };
+
+    })
+</script>
+</html>

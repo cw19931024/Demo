@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title></title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<style>
+		*{
+			font-size: 12px;
+		}
+		#tableList{width: auto;}
+		p{margin-bottom: 0;}
+	.over-Hide1{   
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+    #tableList tbody tr th{border:1px solid #ddd;text-align:center;line-height:12px}
+    #tableList tbody tr td{border:1px solid #ddd;text-align:center}
+    #tableList tbody tr th:nth-child(1){min-width: 65px;}
+    #tableList tbody tr th:nth-child(2){min-width: 60px;}
+    #tableList tbody tr th:nth-child(3){min-width: 120px;}
+    #tableList tbody tr th:nth-child(4){min-width: 65px;}
+    #tableList tbody tr th:nth-child(5){min-width: 60px;}
+	#tableList tbody tr th:nth-child(6){min-width: 65px;}
+    #tableList tbody tr th:nth-child(7){min-width: 60px;}
+    #tableList tbody tr th:nth-child(8){min-width: 120px;}
+    #tableList tbody tr th:nth-child(9){min-width: 65px;}
+    #tableList tbody tr th:nth-child(10){min-width: 60px;}
+	#tableList tbody tr th:nth-child(11){min-width: 65px;}
+    #tableList tbody tr th:nth-child(12){min-width: 60px;}
+    #tableList tbody tr th:nth-child(13){min-width: 120px;}
+    #tableList tbody tr th:nth-child(14){min-width: 65px;}
+    #tableList tbody tr th:nth-child(15){min-width: 60px;}
+	#tableList tbody tr th:nth-child(16){min-width: 65px;}
+    #tableList tbody tr th:nth-child(17){min-width: 60px;}
+    #tableList tbody tr th:nth-child(18){min-width: 120px;}
+    #tableList tbody tr th:nth-child(19){min-width: 65px;}
+    #tableList tbody tr th:nth-child(20){min-width: 60px;}
+	</style>
+</head>
+
+<body>
+	<div>
+		<table ng-hide="msg" id="tableList" class="table table-border table-hover" ng-table="NgTableParams">
+			<tr>
+				<th class="text-center">城区</th>
+				<th class="text-center">商圈</th>
+				<th>楼盘字典</th>
+				<th class="text-center">签约数量</th>
+				<th class="text-center">1居数量</th>
+				<th class="text-center">城区</th>
+				<th class="text-center">商圈</th>
+				<th>楼盘字典</th>
+				<th class="text-center">签约数量</th>
+				<th class="text-center">1居数量</th>
+				<th class="text-center">城区</th>
+				<th class="text-center">商圈</th>
+				<th>楼盘字典</th>
+				<th class="text-center">签约数量</th>
+				<th class="text-center">1居数量</th>
+				<th class="text-center">城区</th>
+				<th class="text-center">商圈</th>
+				<th>楼盘字典</th>
+				<th class="text-center">签约数量</th>
+				<th class="text-center">1居数量</th>
+			</tr>
+			<tr>
+				<td>浦东新区</td>
+				<td>航头</td>
+				<td><p class="over-Hide">就等哈数据库</p></td>
+				<td>30</td>
+				<td>10</td>
+				<td>浦东新区</td>
+				<td>航头</td>
+				<td><p class="over-Hide">就等哈数据库</p></td>
+				<td>30</td>
+				<td>10</td>
+				<td>浦东新区</td>
+				<td>航头</td>
+				<td><p class="over-Hide">就等哈数据库就等哈数据库就等哈数据库就等哈数据库</p></td>
+				<td>30</td>
+				<td>10</td>
+				<td>浦东新区</td>
+				<td>航头</td>
+				<td><p class="over-Hide">就等哈数据库</p></td>
+				<td>30</td>
+				<td>10</td>
+			</tr>
+		</table>
+	</div>
+
+</body>
+<script src="js/jquery.min.js"></script>
+<script>
+	$(function(){
+		var TableWidth=0;
+		var BodyWidth =$(window).width(); 
+		var table = $("#tableList");
+		for(var i=0;i<$("#tableList tbody tr").find('th').length;i++){
+			TableWidth+=$("#tableList tbody tr").find('th').eq(i).width();
+		}
+		console.log('table宽度:'+TableWidth)
+		console.log('设备宽度:'+BodyWidth)
+		if(TableWidth>BodyWidth){
+			table.css('width','auto');
+		}else{
+			table.css('width','100%');
+		}
+		$(window).resize(function(){
+			console.log($(this).width())
+			BodyWidth =$(this).width(); 
+			if(TableWidth>BodyWidth){
+				table.css('width','auto');
+			}else{
+				table.css('width','100%');
+			}
+		})
+	})
+</script>
+
+</html>

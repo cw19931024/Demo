@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <style>
+        .m10{
+            margin: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="m10">
+            <input type="file" name="" value="" id="File">
+        </div>
+        <div class="m10">
+            <button class="btn btn-default btn-sm img">读取图像</button>
+            <button class="btn btn-default btn-sm">读取二进制</button>
+            <button class="btn btn-default btn-sm text">读取文本文件</button>
+        </div>
+        <div id='test'>
+
+        </div>
+    </div>
+</body>
+<script src="js/jquery.min.js"></script>
+<script>
+    if (typeof FileReader == 'undefined') {
+        result.InnerHTML = "<p>你的浏览器不支持FileReader接口！</p>";
+        //使选择控件不可操作  
+        file.setAttribute("disabled", "disabled");
+    }
+    $(function(){
+        $('.img').click(function(){
+            var file = document.getElementById('File').files[0]
+            console.log(file)
+            var reader = new FileReader();
+            reader.readAsDataURL(file)
+            reader.onload = function(e){
+                $("#test").append("<img src='"+e.target.result+"'/>")
+            }
+        })
+    })
+</script>
+
+</html>

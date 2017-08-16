@@ -1,0 +1,72 @@
+<style>
+    .Files-title{
+        height: 30px;
+        line-height: 30px;
+        display: inline-block;
+    }
+    .FileContent{
+        max-height: 400px;
+        overflow: auto;
+    }
+    .FilesBtn{
+        position: relative;
+        display: inline-block;
+        height: 30px;
+    }
+    .FilesBtn input[type=file]{
+        width:46px;
+        height: 30px;
+        position: absolute;
+        right: 0;
+        opacity: 0;
+    }
+    #FileList{
+        border: 1px solid #ddd;
+        font-size: 12px;
+        margin-bottom: 0;
+    }
+    #FileList tr,th,td{
+        border: 1px solid #ddd;
+        vertical-align: middle!important;
+    }
+    .w100{
+        width: 100px; 
+    }
+    .BtnLyout{
+        border-top: 1px solid #ddd;
+        overflow: hidden;
+        background: white!important;
+    }
+</style>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="Files-title">{{FilesSeeting.FilesName}}</div>
+        <div class="FilesBtn pull-right">
+            <input type="file" onchange="angular.element(this).scope().FilesChange(this)" multiple >
+            <button class="btn btn-default btn-sm">{{FilesSeeting.FilesStart}}</button>
+        </div>
+    </div>
+    <div class="panel-body FileContent">
+        <table class="table table-hover table-border" id="FileList">
+            <tr>
+                <th width="{{item.width}}"  class="{{item.algin==''?item.className:item.className+' text-'+item.algin}}" ng-repeat="item in FilesSeeting.FilesTitle">{{item.name}}</th>
+            </tr>
+            <tr ng-repeat="item in FileList">
+                <td>{{item.name}}</td>
+                <td ng-if="FilesSeeting.FilesType.is">
+                    <select class="form-control input-sm w100" ng-model='item.FilesType' ng-options="a.id as a.name for a in FilesSeeting.FilesType.list">
+                        <option value selected>请选择</option>
+                    </select>
+                </td>
+                <td>{{item.Size}}</td>
+                <td>
+                    <button class="btn btn-default btn-sm">删除</button>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+    <div class="panel-heading BtnLyout">
+        <button class="btn btn-default pull-right btn-sm" ng-click='FileAjax()'>上传</button>
+    </div>
+</div>

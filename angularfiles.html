@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="js/angular.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/layer/layer/layer.js"></script>
+    <!--<script src="js/angular.js"></script>-->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <title>Document</title>
+</head>
+<body ng-controller="Ctrl">
+    <div class="container">
+        <image-files seetings="seetings" data-ng-if="seetings"></image-files>
+    </div>
+</body>
+<script>
+    var app = angular.module('app',[]);
+    app.controller('Ctrl',function($scope){
+        $scope.seetings = {
+            FilesName:'图片上传',
+            IsFilesType:true,
+            FilesTitle:[
+                    {name:'文件名',className:'aa',width:'',algin:''},
+                    {name:'文件类型',className:'ds',width:'80',algin:'center'},
+                    {name:'文件大小',className:'ds',width:'80',algin:'center'},
+                    {name:'操作',className:'ds',width:'55',algin:'center'}
+            ],
+            FilesBtn:['确定','取消'],
+            FilesType:{is:true,list:[
+                {name:'户型图',id:1},
+                {name:'内景图',id:2},
+                {name:'外景图',id:3}
+            ]},
+            FilesUrl:'update/do',
+            FilesParams:{
+                deptId:1,
+                RoomId:2
+            },
+            FilesError:test1(),
+            FilesSuccess:test(),
+        }
+    })
+    function test(){
+        console.log('测试')
+    }
+
+    function test1(res){
+        console.log(res)
+    }
+
+</script>
+<script src="js/AngularFiles/angular-files.js"></script>
+</html>

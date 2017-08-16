@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=0otweRDen41EmxqpcjnSefWQe8sAj3xZ"></script>
+    <title>Document</title>
+    <style>
+        *{padding: 0;margin: 0;}
+        #map{width: 100%;height: 500px;}   
+        .bdy{
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        .Marker{
+            white-space:nowrap;
+            display: inline-block;
+            left: 627px;
+            top: 1.3132e+06px;
+            display: inline-block;
+            padding: 2px 10px;
+            background: seagreen;
+            border-radius: 5px;
+            font-size: 12px;
+            color: white;
+            position: absolute;
+        } 
+        .data{
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 100%;
+            width: 300px;
+            background: white;
+            
+            border:1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="bdy">
+        <div id="map"></div>
+        <div class="data">
+            
+        </div>
+    </div>
+</body>
+<script></script>
+<script>
+    var map = new BMap.Map('map');
+    var list = [
+            {lat:113.284859,lnt:23.091341,name:'海富花园三期'},
+            {lat:113.285055,lnt:23.090812,name:'海富花园四期'}
+        ]
+    var point = new BMap.Point(113.284034,23.090243);
+    var marker = new BMap.Marker(point)
+    var top_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_LEFT});// 左上角，添加比例尺
+	var top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
+	var top_right_navigation = new BMap.NavigationControl({anchor: BMAP_ANCHOR_TOP_RIGHT, type: BMAP_NAVIGATION_CONTROL_SMALL}); //右上角，仅包含平移和缩放按钮
+    map.addControl(top_left_control);        
+    map.addControl(top_left_navigation);     
+    map.addControl(top_right_navigation); 
+    map.centerAndZoom(point,19)
+    map.enableScrollWheelZoom();   //启用滚轮放大缩小，默认禁用
+    map.addOverlay(marker);
+    marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+
+    setTimeout(function(){
+        list.forEach(function(e){
+            var marker = new ComLay(e);
+            map.addOverlay(marker)
+        })
+    },500)
+
+    //自定义market;
+        function ComLay(data){
+                this._data = data;
+        }
+        ComLay.prototype = new BMap.Overlay();
+        ComLay.prototype.initialize = function(map){
+            var _this = this;
+            this._map = map;
+            var div = this._div = document.createElement("div");
+            div.appendChild(document.createTextNode(this._data.name));
+            div.className = 'Marker';
+            map.getPanes().labelPane.appendChild(div);
+            return div;
+        }
+        ComLay.prototype.draw = function(){
+            var map = this._map;
+            var point = new BMap.Point(this._data.lat,this._data.lnt)
+            var pixel = map.pointToOverlayPixel(point);
+            this._div.style.left = pixel.x-30+'px';
+            this._div.style.top  = pixel.y-10+'px';
+        }
+    //end
+
+
+</script>
+</html>

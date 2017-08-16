@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>file</title>
+</head>
+<body>
+    <input type="file" name='filename' id="file">
+    <button class="btn">提交</button>
+</body>
+<script src="js/jquery.min.js"></script>
+<script>
+    $(function(){
+        $('.btn').click(function(){
+            var file = $('#file')[0].files[0];
+            var formdata = new FormData();
+            formdata.append('name',file);
+            formdata.append('name',"file",'filename')
+            $.ajax({
+                type:"post",
+                url:'test.html',
+                data:formdata,
+                processData : false,
+                contentType:false,
+                success:function(res){
+                    console.log(res)
+                }
+            })
+        })
+    })
+</script>
+</html>

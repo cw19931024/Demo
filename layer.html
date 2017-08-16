@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <style>
+        table {
+            font-size: 12px;
+        }
+        
+        table tr th {
+            border: 1px solid #ddd
+        }
+        
+        table tr td {
+            border: 1px solid #ddd
+        }
+    </style>
+    <title>Document</title>
+</head>
+
+<body ng-controller="Ctrl">
+    <div class="container">
+        <table class="table table-hover table-border text-center">
+        <tr>
+            <th width="60" class="text-center">排序</th>
+            <th width="60" class="text-center">名字</th>
+            <th width="60" class="text-center">年龄</th>
+            <th width="60" class="text-center">地址</th>
+            <th width="45" class="text-center" ng-repeat="tit in title track by $index">{{tit}}</th>
+        </tr>
+        <tr ng-repeat="item in data track by $index">
+            <td>{{$index+1}}</td>
+            <td>{{item.name}}</td>
+            <td>{{item.age}}</td>
+            <td>{{item.address}}</td>
+            <td ng-repeat="tit in title track by $index">{{tit}}</td>
+        </tr>
+    </table>
+    </div>
+</body>
+<script src="js/angular.js"></script>
+<script src="js/jquery.min.js"></script>
+<script>
+    var app = angular.module('app', []);
+    app.controller('Ctrl', function ($scope) {
+        $scope.name = '测试';
+        $scope.num = 0;
+        $scope.list = [];
+        $scope.title = [];
+        $scope.test = [];
+        $scope.data = [];
+        for (var i = 0; i < 100000; i++) {
+            var obj = new Object();
+                obj.name = "测试";
+                obj.age = 12;
+                obj.address = "浦东新区";
+                obj.num = parseInt(Math.random() * 100);
+                $scope.list.push(obj);
+        }
+        $scope.test = For($scope.list,$scope.data,-1);
+        $scope.data = $scope.test[0];
+        console.log($scope.test)
+        function For(list,data,num){
+            for(var i=0;i<list.length;i++){
+                if(i%100==0){
+                    num+=1;
+                    data[num]=[];
+                }else{
+                    data[num].push(list[i])
+                }
+            }
+            return data
+        }
+
+        for (var i = 0; i < 99; i++) {
+            $scope.title.push(parseInt(Math.random() * 100));
+        }
+
+        function your(num) {
+            $scope.data.push.apply($scope.data,$scope.test[num]);
+            console.log($scope.data)
+            $scope.$apply();
+        }
+        $(window).bind("scroll", function () {
+            
+            if($(document).scrollTop() + $(window).height() > $(document).height() - 10){
+                $scope.num+=1;
+                your($scope.num);
+            }
+        });
+    })
+</script>
+
+</html>

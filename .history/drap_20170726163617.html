@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <style>
+        .container{width: 1000px;margin: 0 auto;}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+    </div>
+</body>
+ <script type="text/javascript">
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+        function drop(ev) {
+            ev.preventDefault();
+            ev.target.appendChild(document.getElementById('drag1'));
+        }
+    </script>
+</html>

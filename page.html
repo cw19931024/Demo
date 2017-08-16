@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="js/angular.js"></script>
+</head>
+
+<body ng-controller="Ctrl">
+    <tree-fc></tree-fc>
+    <button ng-click="test()">ceshi</button>
+</body>
+<script>
+    var app = angular.module('app', []);
+    app.controller('Ctrl', function ($scope,$rootScope) {
+        // $scope.$on('test', function (event, data) {
+        //     console.log(data)
+        // });
+
+        $scope.test = function(){
+            $scope.$broadcast("cw",11)
+        }
+
+            
+        
+
+    })
+
+    app.directive('treeFc', function () {
+        return {
+            restrict: 'E',
+            replace: false,
+            scope: {
+                seetings: '='
+            },
+            templateUrl: '/js/AngularFiles/angular-files.html',
+            link: function (scope, elem, attr) {
+                // scope.$emit('test', 'chengwen')
+                scope.cw =1;
+                scope.$on('cw',function(res,data){
+                    console.log(data)
+                })
+            }
+        }
+    })
+</script>
+
+</html>

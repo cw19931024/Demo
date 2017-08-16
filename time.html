@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div class="test"></div>
+    <a href="" target="_blank" id="ay"></a>
+</body>
+<script src="js/jquery.min.js"></script>
+<script>
+    (function($){
+        $.fn.extend({
+            test:function(data,callback){
+                callback(1);
+
+                var MyFUN =function(){
+                    console.log('调用成功！')
+                }
+
+                function Clear(){
+                    alert("清除")
+                }
+                return {
+                    Clear:Clear
+                };
+            }
+        })
+    })(jQuery)
+
+    var a = $('.test').test({},function(res){
+        console.log(res)
+    })
+    console.log(a)
+    a.Clear()
+    $('#ay').removeAttr('target')
+</script>
+</html>

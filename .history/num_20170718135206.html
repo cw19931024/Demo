@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body ng-controller="Ctrl">
+    <select ng-model='obj' ng-options="item.id as item.name for item in list"></select>
+    <select ng-model='obj1' ng-options="item.id as item.name for item in list1"></select>
+</body>
+<script src="js/angular.js"></script>
+<script>
+    var app = angular.module('app',[]);
+    app.controller('Ctrl',function($scope){
+        $scope.obj =2;
+        $scope.list = [
+            {name:'上海',id:1},
+            {name:'武汉',id:2},
+            {name:'成都',id:3},
+        ]
+        $scope.obj1 ='武汉';
+        $scope.list1 = ['上海','武汉','成都']
+    })
+</script>
+</html>

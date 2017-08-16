@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+    <h1>11</h1>
+</body>
+<script src="js/jquery.min.js"></script>
+<script>
+    $.fn.shadow = function (opts) {
+        //定义的默认的参数
+        var defaults = {
+            copies: 5,
+            opacity: 0.1,
+            //回调函数
+            copyOffset: function (index) {
+                return {
+                    x: index,
+                    y: index
+                };
+            }
+        };
+        //将opts的内容合并到default中。
+        var options = $.extend(defaults, opts);
+        return options.copyOffset(1);
+    };
+    $(document).ready(function () {
+                $('h1').shadow({
+                    copies: 5,
+                    copyOffset: function (index) {
+                        console.log(index)
+                        return {
+                            x: -index,
+                            y: -2 * index
+                        };
+                    }
+                });
+    })
+</script>
+
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <button class="btn">点击</button>
+    <button class="btn1">点击</button>
+</body>
+<script src="js/jquery.min.js"></script>
+<script>
+    $(function () {
+        $.ajax({
+            url: "http://lolapi.games-cube.com/UserArea",
+            type: "GET",
+            headers: {
+                "DAIWAN-API-TOKEN": "995DE-79057-520D4-06E37"
+            },
+            data:{
+                keyword:'青莲剑心'
+            },
+            success: function (res) {
+                console.log(res.data)
+            }
+        });
+    })
+</script>
+
+</html>

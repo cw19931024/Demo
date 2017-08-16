@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" context="width=device-width, initial-scale=1">
+    <style>
+        canvas {
+            margin: 0 auto;
+            border: 1px solid red;
+            width: 1024px;
+            height: 500px;
+        }
+
+        .tac {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="tac">
+        <canvas id="canvas" width="1024" height="500"></canvas>
+    </div>
+</body>
+<script>
+    var data = [
+        [96.24, 11.35],
+        [33.09, 85.11],
+        [57.60, 36.61],
+        [36.77, 27.26],
+        [20.10, 6.72],
+        [45.53, 36.37],
+        [110.07, 80.13],
+        [72.05, 20.88],
+        [39.82, 37.15],
+        [48.05, 70.50],
+        [0.85, 2.57],
+        [51.66, 63.70],
+        [61.07, 127.13],
+        [64.54, 33.59],
+        [35.50, 25.01],
+        [226.55, 664.02],
+        [188.60, 175.31],
+        [81.31, 108.68]
+    ];
+
+    var canvas = document.getElementById('canvas');
+    var context = canvas.getContext('2d');
+    var width = canvas.width;
+    var height = canvas.height;
+    var padding = 10;
+    //y轴线
+    context.beginPath();
+    context.lineWidth = 1;
+    context.moveTo(padding + 0.5, height - padding - 0.5);
+    context.lineTo(padding + 0.5, padding + 0.5);
+    context.stroke();
+
+    //x轴线
+    Edit([padding,height-padding-0.5],'moveTo');
+    Edit([width-padding-0.5,height-padding-0.5],'lineTo');
+    Edit([padding,padding + 0.5],'moveTo');
+    Edit([width - padding - 0.5,padding + 0.5],'lineTo');
+    // context.beginPath();
+    // context.moveTo(padding, height - padding - 0.5);
+    // context.lineTo(width - padding - 0.5, height - padding - 0.5)
+    // context.moveTo(padding, padding + 0.5);
+    // context.lineTo(width - padding - 0.5, padding + 0.50)
+    // context.stroke();
+
+    var Number = 5; //y轴的段数
+    var yLength = Math.floor(height - padding * 2 / Number);
+    var xLength = Math.floor(width - padding * 2 / data.length);
+
+    data.forEach(function(e){
+        
+    })
+
+    function Edit(data,type){
+        console.log(data)
+        console.log(type)
+        context.beginPath();
+        // context.moveTo(padding, height-padding-0.5);
+        // context.lineTo(width - padding - 0.5, height - padding - 0.5)
+        context[type](data[0],data[1])
+        context.stroke();
+    }
+</script>
+
+</html>

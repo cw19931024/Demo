@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="js/angular.js"></script>
+        <style>
+            .content{width: 1000px;border:1px solid #ddd;}
+            .img_list{width: 300px;height: 200px;border:1px solid #ddd;overflow: hidden;display: inline-block;margin: 5px;text-align: center;}
+            .img_w{width: 100%;top:50%;transform: translateY(-50%);position: relative;}
+            .img_h{height: 100%;}
+        </style>
+    </head>
+    <body ng-controller="Ctrl">
+        <div class="content" id="test" name="3">
+            <div class="img_list" ng-repeat="item in list" name='1'>
+                <a href=""><img ng-src="{{'img/'+item}}" alt="" ></a>
+            </div>
+        </div>
+    </body>
+    <script>
+        var app = angular.module('app',[]);
+        app.controller('Ctrl',function($scope){
+            $scope.list = ['gbt_1.jpg','gbt_2.jpg','gbt_3.jpg','kt_rc_banner.jpg','环境.png','as.jpg','QQ截图.png'];
+            setTimeout(item=>AddClass(),200)
+            function AddClass(){
+                var ImgList = document.querySelectorAll(".img_list img");
+                for(i in ImgList){
+                    if(ImgList[i].width>ImgList[i].height){
+                        ImgList[i].className+=' img_w';
+                    }else{
+                        ImgList[i].className+=' img_h';
+                    }
+                }
+            }
+        })
+    </script>
+</html>

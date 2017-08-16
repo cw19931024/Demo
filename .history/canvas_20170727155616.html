@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <style>
+        canvas {
+            width: 1000px;
+            height: 500px;
+            margin: 0 auto;
+            border: 1px solid #ddd;
+        }
+    </style>
+    <title>Document</title>
+</head>
+
+<body>
+    <canvas id="canvas" width="1000" height="500"></canvas>
+</body>
+<script>
+    var data = [
+        [0.85, 2.57],
+        [110.07, 80.13],
+        [188.6, 175.31],
+        [20.1, 6.72],
+        [226.55, 664.02],
+        [33.09, 85.11],
+        [35.5, 25.01],
+        [36.77, 27.26],
+        [39.82, 37.15],
+        [45.53, 36.37],
+        [48.05, 70.5],
+        [51.66, 63.7],
+        [57.6, 36.61],
+        [61.07, 127.13],
+        [64.54, 33.59],
+        [72.05, 20.88],
+        [81.31, 108.68],
+        [96.24, 11.35]
+    ]
+
+    data = args(data)
+    var canvas = document.getElementById('canvas');
+    var context = canvas.getContext('2d');
+    var width = canvas.width;
+    var height = canvas.height;
+    padding = 45.5;
+
+    context.beginPath();
+    Edit('moveTo', [width - padding, height - padding])
+    Edit('lineTo', [padding, height - padding])
+    Edit('moveTo', [width - padding, padding])
+    Edit('lineTo', [padding, padding])
+    Edit('moveTo', [padding, padding])
+    Edit('lineTo', [padding, height - padding])
+    context.stroke();
+    for (var i = 0; i < data.length; i++) {
+        context.beginPath();
+        context.arc(data[i][0] + padding + 4.5, (height - data[i][1] - padding - 3), 4.5, 0, Math.PI * 2, true)
+        context.strokeStyle = '#000'
+        context.fill();
+    }
+
+    function Edit(type, data) {
+        return context[type](data[0], data[1]);
+    }
+
+    function args(data) {
+        for (var i = 0; i < data.length; i++) {
+            for (var j = i + 1; data.length; j++) {
+                if (data[i] > data[j]) {
+                    var x = data[i];
+                    data[i] = data[j];
+                    data[j] = x;
+                }
+            }
+        }
+        console.log(data)
+        return data;
+    }
+</script>
+
+</html>
