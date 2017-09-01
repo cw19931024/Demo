@@ -72,9 +72,7 @@
                     console.log(scope.list)
                     scope.DownList = scope.list[0];
                     scope.num = 0;
-                    $(".Dropdown-menu").scroll(function(){
-                        debugger;
-                        console.log(1)
+                    $(window).scroll(function(){
                         if($(this).scrollTop() > $(this).height() - 30){
                             AddData();
                         }

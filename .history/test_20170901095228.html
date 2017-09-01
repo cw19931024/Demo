@@ -7,25 +7,20 @@
 	<script src="js/jquery.min.js"></script>
 	<style>
 		.test{
-			height: 100px;
+			height: 2000px;
 			overflow: auto;
-			width: 100px;
-			border:1px solid #ddd;
-		}
-		.test2{
-			height:1000px;width:40px;background:red;
 		}
 	</style>
 	<title>Document</title>
 </head>
 <body>
 	<div class="test">
-		<div class="test2"></div>
+
 	</div>
 </body>
 <script>
-	$('.test1').scroll(function(){
-		console.log($(this).scrollTop()+$('test2').height())
+	$(window).scroll(function(){
+		console.log($(this).scrollTop()+$(document).height())
 		console.log($(this).height())
 		if($(this).scrollTop()+$(document).height()===$(this).height()){
             console.log(1)

@@ -72,11 +72,9 @@
                     console.log(scope.list)
                     scope.DownList = scope.list[0];
                     scope.num = 0;
-                    $(".Dropdown-menu").scroll(function(){
-                        debugger;
-                        console.log(1)
+                    $(".Dropdown-menu").on('scroll',function(){
                         if($(this).scrollTop() > $(this).height() - 30){
-                            AddData();
+                            
                         }
                     })
                 }
@@ -103,7 +101,6 @@
                 function AddData(){
                     scope.num+=1;
                     scope.list[scope.num].forEach(function(e){
-                        console.log(e)
                         scope.DownList = e;
                     })
                 }

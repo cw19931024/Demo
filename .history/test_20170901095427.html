@@ -24,8 +24,8 @@
 	</div>
 </body>
 <script>
-	$('.test1').scroll(function(){
-		console.log($(this).scrollTop()+$('test2').height())
+	$('test1').scroll(function(){
+		console.log($(this).scrollTop()+$(document).height())
 		console.log($(this).height())
 		if($(this).scrollTop()+$(document).height()===$(this).height()){
             console.log(1)
