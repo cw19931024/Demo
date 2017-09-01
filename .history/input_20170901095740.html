@@ -61,7 +61,6 @@
                 scope.num = 0;
                 scope.list[scope.num] = [];
                 function Ctrl(){
-                    //分割数据。将大数据分成20个一组。
                     console.log('数据数量:'+scope.Default.Data.length)
                     for(var i = 1;i<scope.Default.Data.length+1;i++){
                         scope.list[scope.num].push(scope.Default.Data[i-1]);
@@ -101,8 +100,7 @@
                     scope.Default.value =value;
                     scope.ngModel=value;
                 }
-                
-                //根据下标来将数据添加到DownList
+
                 function AddData(){
                     scope.num+=1;
                     scope.list[scope.num].forEach(function(e){
