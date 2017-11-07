@@ -1,0 +1,47 @@
+<style>
+    .ng-down-select {
+        width: 120px;
+        max-width: 120px;
+    }
+
+    .ng-down-select .downSelect {
+        border: 1px solid #ddd;
+        padding: 5px;
+        overflow: auto;
+        max-height: 200px;
+        border-radius: 2px;
+    }
+
+    .ng-down-select .downSelect .downSelect-option {
+        line-height: 20px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    .ng-down-select .downSelect .downSelect-option:hover {
+        background: red;
+        cursor: pointer;
+    }
+
+    .ng-down-select input[type=text] {
+        width: 100%;
+        box-sizing: border-box;
+        display: block;
+        margin-bottom: 2px;
+    }
+</style>
+<div class="ng-down-select">
+    <div>
+        <select ng-model='ngModel' ng-show="false" ng-options="item.id as item.name for item in data.list">
+            <option value selected hidden>{{data.defaultText}}</option>
+        </select>
+    </div>
+    <div>
+        <span>{{data.defaultText}}</span>
+        <input type="text" ng-model="search" placeholder="{{data.placeholderText}}">
+        <div class="downSelect">
+            <div class="downSelect-option" ng-click="UpdateDown(item)" ng-repeat="item in data.list">{{item.name}}</div>
+        </div>
+    </div>
+</div>

@@ -16,16 +16,6 @@
             var formdata = new FormData();
             formdata.append('name',file);
             formdata.append('name',"file",'filename')
-            $.ajax({
-                type:"post",
-                url:'test.html',
-                data:formdata,
-                processData : false,
-                contentType:false,
-                success:function(res){
-                    console.log(res)
-                }
-            })
         })
     })
 </script>

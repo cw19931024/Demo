@@ -1,34 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" ng-app="app">
 <head>
-    <title></title>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="css/style.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
 </head>
-
-<body>
-    <button class="btn">点击</button>
-    <button class="btn1">点击</button>
+<body ng-controller="Ctrl">
+        <input type="radio" name=""  ng-checked="item.value"  id="" ng-repeat="item in list">{{item.str}}
 </body>
-<script src="js/jquery.min.js"></script>
+<script src="js/angular.js"></script>
 <script>
-    $(function () {
-        $.ajax({
-            url: "http://lolapi.games-cube.com/UserArea",
-            type: "GET",
-            headers: {
-                "DAIWAN-API-TOKEN": "995DE-79057-520D4-06E37"
-            },
-            data:{
-                keyword:'青莲剑心'
-            },
-            success: function (res) {
-                console.log(res.data)
-            }
-        });
+    var app = angular.module('app',[]);
+    app.controller('Ctrl',function($scope){
+        $scope.list=[
+        {str:1,value:true},
+        {str:2,value:true},
+        {str:3,value:false},
+        {str:4,value:true}
+        ]
     })
 </script>
-
 </html>

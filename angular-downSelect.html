@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body ng-controller="Ctrl">
+    当前城市:{{city}}
+    <down-select seetings="seetings" ng-if="seetings.list.length>0" ng-model="city" />
+</body>
+<script src="js/angular.js"></script>
+<script src="js/angular-downSelect/index.js"></script>
+<script>
+    var app = angular.module('app', ['ng-downSelect']);
+    app.controller('Ctrl', function ($scope, $http) {
+        Getlist()
+        function Getlist() {
+            $http.get('http://www.easy-mock.com/mock/59ef228694bcf16c5f9f7b4f/test/list').then(function (res) {
+                $scope.list = res.data.data;
+                $scope.seetings = {
+                    defaultText: '请选择',
+                    className: 'test',
+                    placeholderText:'请输入城市名',
+                    list: $scope.list
+                }
+            })
+        }
+    })
+</script>
+
+</html>

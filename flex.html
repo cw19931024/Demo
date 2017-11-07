@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <style>
+        .flex {
+            display: flex;
+        }
+        .flex-direction-reverse{
+            flex-direction:row-reverse
+        }
+        .box {
+            width: 50px;
+            height: 50px;
+            background: black;
+            font-size: 24px;
+            text-align: center;
+            line-height: 50px;
+            color: white;
+        }
+
+        .box {
+            margin: 0 5px;
+        }
+        /* .box:first{
+            margin-left: 0;
+        } */
+        /* .box+.box{
+            margin-right:5px;
+            margin-left: 0;
+        } */
+        .mb10{
+            margin-bottom: 10px;
+        }
+        .col-xs-6{padding: 0; border-radius: 0;}
+        .col-xs-6+.col-xs-6{border-left: 0;}
+        .dtable{
+            display: table;
+            width: 100%;
+        }
+        .dtc{
+            display: table-cell;
+        }
+        .input{
+            height: 34px;
+            padding: 6px 12px;
+            font-size: 14px;
+            color: #555;
+            outline: none;
+            border:1px solid #ccc;
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        }
+    </style>
+    <title>flex布局</title>
+</head>
+
+<body ng-controller="Ctrl">
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">flex布局对比</div>
+            <div class="panel-body">
+                <div class="panel panel-default col-xs-6">
+                    <div class="panel-heading">flex布局</div>
+                    <div class="panel-body">
+                        <div class="flex flex-direction-reverse">
+                            <div class="box">1</div>
+                            <div class="box">2</div>
+                            <div class="box">3</div>
+                            <div class="box">4</div>
+                            <div class="box">5</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default col-xs-6">
+                    <div class="panel-heading">float布局</div>
+                    <div class="panel-body">
+                        <div>
+                            <div class="box pull-right">1</div>
+                            <div class="box pull-right">2</div>
+                            <div class="box pull-right">3</div>
+                            <div class="box pull-right">4</div>
+                            <div class="box pull-right">5</div>
+                        </div>
+                    </div>
+                </div>
+                <pre class="col-xs-12">
+float布局：每个需要进行布局改变的dom需要float:right||left;破坏文档流，需要改变的时候需要修改全部dom的class或者属性。
+flex布局：父级只需要设置一个属性的参数:row||row-reverse就能达到类似左右浮动切换;
+                </pre>
+                <div class="panel panel-default col-xs-6">
+                    <div class="panel-heading">flex布局</div>
+                    <div class="panel-body">
+                        <div class="flex" style="justify-content: space-between;">
+                            <div class="box">1</div>
+                            <div class="box">2</div>
+                            <div class="box">3</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default col-xs-6">
+                    <div class="panel-heading">常规布局</div>
+                    <div class="panel-body">
+                        <div class="dtable">
+                            <div class="dtc">
+                                <div class="box">1</div>
+                            </div>
+                            <div class="dtc" style="text-align:center;">
+                                <div class="box" style="display:inline-block;">2</div>
+                            </div>
+                            <div class="dtc" style="text-align:right;">
+                                <div class="box" style="display:inline-block;">3</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <pre class="col-xs-12">
+常规的左中右布局
+display:table|| position: absolute||float:left/right;
+常规布局：需要借助position:absolute+display:block，display:table，float多个布局方式配合。
+float||position:absolute:脱离文档流
+display:table:对于个别属性失效或者宽度强制填充(无法解决)
+——————————————————————————————————————————————————————
+flex布局:父节点添加一个属性:justify-content: space-between||space-around||space-evenly任意一个属性(三种左中右效果)即可完美实现。
+                </pre>
+                <div class="panel panel-default col-xs-6">
+                    <div class="panel-heading">flex布局</div>
+                    <div class="panel-body">
+                        <div class="flex mb10" style="align-items: baseline;">
+                            <div style="flex-basis:50px;">账号</div>
+                            <input style="flex-basis:100%;" type="text" class="input">
+                        </div>
+                        <div class="flex" style="align-items: baseline;">
+                            <div style="flex-basis:50px;">账号</div>
+                            <input style="flex-basis:100%;" type="text" class="input"/>
+                            <a href="#" class="btn btn-info" style="flex-basis:50px;">验证</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default col-xs-6">
+                    <div class="panel-heading">display:table布局</div>
+                    <div class="panel-body">
+                        <div class="dtable mb10">
+                            <div class="input-group">
+                                <div class="input-group-addon">账号</div>
+                                <input type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <div class="input-group-addon">账号</div>
+                            <input type="text" class="form-control">
+                            <div class="input-group-btn">
+                                <a href="#" class="btn btn-info">验证</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <pre class="col-xs-12">
+常规自适应布局：
+display:table;
+总结:父节点:display:table(影响宽度与block区别是,默认不是100%),子节点:display:table-cell。
+固定宽:table-cell+设置宽度;
+自适应宽:table-cell+不设置宽度;
+________________________________________________________________________________
+flex布局:
+总结:父节点:无变化，子节点：添加flex-basis属性;
+固定宽:flex-basis: 50px;
+自适应宽:无;
+                </pre>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

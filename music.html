@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="app">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,9 +8,34 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <title>Document</title>
 </head>
-<body>
+
+<body ng-controller="Ctrl">
     <div class="container">
-        
+        {{name}}
+        <input type="text" ng-model='name'>
+        <label class="radio-inline" ng-repeat="item in list">
+            <input type="radio" name="optis" ng-model='$parent.name' value={{item.value}}> {{item.name}}
+        </label>
     </div>
 </body>
+<script src="js/angular.min.js"></script>
+<script>
+    var app = angular.module('app', []).controller('Ctrl', function ($scope) {
+        $scope.name = 1;
+        $scope.list = [{
+                name: '不审核',
+                value: 0
+            },
+            {
+                name: '不审批',
+                value: 1
+            },
+            {
+                name: '不审核不审批',
+                value: 2
+            },
+        ]
+    })
+</script>
+
 </html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <style>
+        .w100 {
+            width: 100px!important;
+        }
+
+        .m10 {
+            margin: 10px 0
+        }
+
+        input[type=text] {
+            width: 100px;
+        }
+
+        .title {
+            width: 80px;
+            text-align: right;
+            display: inline-block;
+        }
+
+        select {
+            width: 100px;
+            height: 26px;
+        }
+
+        .table {
+            border: 1px solid #ddd;
+        }
+
+        input[type=radio] {
+            margin-right: 5px;
+        }
+    </style>
+    <title>Document</title>
+</head>
+
+<body ng-controller="Ctrl">
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">批量设置房号</div>
+            <div class="panel-body">
+                <div class="panel col-xs-6" style="border-right:1px solid #ddd;">
+                    <div class="panel-body">
+                        <div class="m10">
+                            <div class="title">格式：</div>
+                            <input type="radio" name='type' ng-model="formData.type" value="0">数字
+                            <input type="radio" name='type' ng-model="formData.type" value="a">字母
+                        </div>
+                        <div class="m10">
+                            <span class="title">栋座：</span><select ng-model="formData.seatNo" ng-options="i as i for i in data">
+                                <option value selected hidden>请选择</option>
+                            </select>
+                        </div>
+                        <div class="m10">
+                            <span class="title">楼层：</span><input type="text" ng-model="formData.flourNoStart">-<input type="text"
+                                ng-model="formData.flourNoEnd">
+                        </div>
+                        <div class="m10">
+                            <span class="title">房号尾数：</span><input type="text" ng-model="formData.roomNoStart">-<input type="text"
+                                ng-model="formData.roomNoEnd">
+                        </div>
+                        <div class="m10">
+                            <button class="btn btn-default" ng-click="add()">预览</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel col-xs-6">
+                    <div class="panel-body">
+                        <table class="table">
+                            <tr>
+                                <th>栋座</th>
+                                <th>楼层</th>
+                                <th>房号</th>
+                            </tr>
+                            <tr ng-repeat="item in list">
+                                <td>{{item.seatNo}}栋</td>
+                                <td>{{item.flour}}</td>
+                                <td>{{item.room}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="js/angular.js"></script>
+<script>
+    var app = angular.module('app', []);
+    app.controller('Ctrl', function ($scope) {
+        $scope.data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        $scope.list = [];
+        $scope.formData = {}
+        $scope.add = function () {
+            console.log($scope.formData);
+            let data = $scope.formData;
+            data.flourNoStart = parseInt(data.flourNoStart)
+            data.flourNoEnd = parseInt(data.flourNoEnd)
+            if (data.type == '0'){
+                zero(data)
+            }
+            else{
+                a(data)
+            }
+        }
+
+        function a(data) {
+            data.roomNoStart = data.roomNoStart.charCodeAt(0)
+            data.roomNoEnd = data.roomNoEnd.charCodeAt(0)
+            for (let f = data.flourNoStart; f < data.flourNoEnd + 1; f++) {
+                for (let r = data.roomNoStart; r < data.roomNoEnd + 1; r++) {
+                    console.log(f + '' + (r > 9 ? r : '0' + r))
+                    $scope.list.push({
+                        seatNo: data.seatNo,
+                        flour: f,
+                        room: f+String.fromCharCode(r)
+                    })
+                }
+            }
+        }
+
+        function zero(data) {
+            data.roomNoStart = parseInt(data.roomNoStart)
+            data.roomNoEnd = parseInt(data.roomNoEnd)
+            for (let f = data.flourNoStart; f < data.flourNoEnd + 1; f++) {
+                for (let r = data.roomNoStart; r < data.roomNoEnd + 1; r++) {
+                    console.log(f + '' + (r > 9 ? r : '0' + r))
+                    $scope.list.push({
+                        seatNo: data.seatNo,
+                        flour: f,
+                        room: r > 9 ? f + '' + r : f + '0' + r
+                    })
+                }
+            }
+        }
+
+    })
+</script>
+
+</html>

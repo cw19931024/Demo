@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body ng-controller="Ctrl">
+    <span>
+        <input type="radio" value="1" name="radio" ng-disabled="val==2||val==3" ng-model='val'/>审批
+        <input type="radio" value="2" name="radio" ng-disabled="val==1" ng-model='val'/>审核
+        <input type="radio" value="3" name="radio" ng-disabled="val==1" ng-model='val'/>不审批不审核
+    </span>
+</body>
+<script src="js/angular.js"></script>
+<script>
+    var app = angular.module('app',[]);
+    app.controller('Ctrl',function($scope){
+        $scope.Radiolist = [
+            {id:1,name:'审批'},
+            {id:2,name:'审核'},
+            {id:3,name:'不审批不审核'},
+        ]
+    })
+</script>
+</html>

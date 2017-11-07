@@ -1,41 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 </head>
+
 <body>
-    <div class="test"></div>
-    <a href="" target="_blank" id="ay"></a>
+
 </body>
 <script src="js/jquery.min.js"></script>
 <script>
-    (function($){
-        $.fn.extend({
-            test:function(data,callback){
-                callback(1);
+    var time = ['2017-10-16 22:00:00', '2017-09-16 22:00:00', '2017-10-16 22:55:10', '2016-02-13 11:11:11']
+    // time.forEach(function (e) {
+    //     DateStr(new Date(e).getTime())
+    // })
+    DateStr(((new Date().getTime() / 1000) - 5) * 1000)
 
-                var MyFUN =function(){
-                    console.log('调用成功！')
-                }
+    function DateStr(num) {
+        var date = new Date().getTime();
+        var time = parseInt((date - num) / 1000);
+        if (time < 60) {
+            str = parseInt(time) + '秒前';
+            return str
+        }
+        if (time > 59 && time < 3600) {
+            str = parseInt(time / 60) + '分钟前';
+            return str
+        }
+        if (time > 3599 && time < 86400) {
+            str = parseInt(time / 3600) + '小时前';
+            return str
+        }
+        if (time > 86399 && time < 2592000) {
+            str = parseInt(time / 86400) + '天前';
+            return str
+        }
+        if (time > 2591999 && time < 31104000) {
+            str = parseInt(time / 2592000) + '个月前';
+            return str
+        }
+        if (time > 31103999 && time < 62208000) {
+            str = parseInt(time / 31104000) + '年前';
+            return str
+        } else {
+            str = '很久之前';
+            return str
+        }
+    }
 
-                function Clear(){
-                    alert("清除")
-                }
-                return {
-                    Clear:Clear
-                };
-            }
-        })
-    })(jQuery)
-
-    var a = $('.test').test({},function(res){
-        console.log(res)
-    })
-    console.log(a)
-    a.Clear()
-    $('#ay').removeAttr('target')
+    function gettime(createtime) {
+        var now = Date.parse(new Date()) / 1000;
+        var limit = now - createtime;
+        var content = "";
+        if (limit < 60) {
+            content = "刚刚";
+        } else if (limit >= 60 && limit < 3600) {
+            content = Math.floor(limit / 60) + "分钟前";
+        } else if (limit >= 3600 && limit < 86400) {
+            content = Math.floor(limit / 3600) + "小时前";
+        } else if (limit >= 86400 && limit < 2592000) {
+            content = Math.floor(limit / 86400) + "天前";
+        } else if (limit >= 2592000 && limit < 31104000) {
+            content = Math.floor(limit / 2592000) + "个月前";
+        } else {
+            content = "很久前";
+        }
+        console.log(content)
+        return content;
+    }
 </script>
+
 </html>
