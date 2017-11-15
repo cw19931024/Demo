@@ -10,12 +10,15 @@
         .flex {
             display: flex;
         }
-        .flex-direction-reverse{
-            flex-direction:row-reverse
+
+        .flex-direction-reverse {
+            flex-direction: row-reverse
         }
+
         .box {
             width: 50px;
             height: 50px;
+            margin: 0 5px;
             background: black;
             font-size: 24px;
             text-align: center;
@@ -23,8 +26,15 @@
             color: white;
         }
 
-        .box {
+        .box-sm {
+            width: 25px;
+            height: 25px;
             margin: 0 5px;
+            background: black;
+            font-size: 16px;
+            text-align: center;
+            line-height: 25px;
+            color: white;
         }
         /* .box:first{
             margin-left: 0;
@@ -33,26 +43,70 @@
             margin-right:5px;
             margin-left: 0;
         } */
-        .mb10{
+
+        .dib {
+            display: inline-block;
+        }
+
+        .mb10 {
             margin-bottom: 10px;
         }
-        .col-xs-6{padding: 0; border-radius: 0;}
-        .col-xs-6+.col-xs-6{border-left: 0;}
-        .dtable{
+
+        .col-xs-6 {
+            padding: 0;
+            border-radius: 0;
+        }
+
+        .col-xs-6+.col-xs-6 {
+            border-left: 0;
+        }
+
+        .dtable {
             display: table;
             width: 100%;
         }
-        .dtc{
+
+        .dtc {
             display: table-cell;
         }
-        .input{
+
+        .flex-algn-end {
+            align-items: flex-end
+        }
+
+        .input {
             height: 34px;
             padding: 6px 12px;
             font-size: 14px;
             color: #555;
             outline: none;
-            border:1px solid #ccc;
-            box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            border: 1px solid #ccc;
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+        }
+
+        .vab {
+            vertical-align: bottom;
+        }
+
+        .flex-grow_0 {
+            flex-grow: 0
+        }
+
+        .flex-grow_1 {
+            flex-grow: 1
+        }
+
+        .flex-shrink_0 {
+            flex-shrink: 0
+        }
+
+        .flex-shrink_1 {
+            flex-shrink: 1
+        }
+
+        .pre {
+            width: 1035px;
+            margin-left: 5px;
         }
     </style>
     <title>flex布局</title>
@@ -64,7 +118,7 @@
             <div class="panel-heading">flex布局对比</div>
             <div class="panel-body">
                 <div class="panel panel-default col-xs-6">
-                    <div class="panel-heading">flex布局</div>
+                    <div class="panel-heading">flex-direction: row-reverse</div>
                     <div class="panel-body">
                         <div class="flex flex-direction-reverse">
                             <div class="box">1</div>
@@ -76,7 +130,7 @@
                     </div>
                 </div>
                 <div class="panel panel-default col-xs-6">
-                    <div class="panel-heading">float布局</div>
+                    <div class="panel-heading">float:right</div>
                     <div class="panel-body">
                         <div>
                             <div class="box pull-right">1</div>
@@ -127,7 +181,7 @@ display:table:对于个别属性失效或者宽度强制填充(无法解决)
 flex布局:父节点添加一个属性:justify-content: space-between||space-around||space-evenly任意一个属性(三种左中右效果)即可完美实现。
                 </pre>
                 <div class="panel panel-default col-xs-6">
-                    <div class="panel-heading">flex布局</div>
+                    <div class="panel-heading">flex-basis</div>
                     <div class="panel-body">
                         <div class="flex mb10" style="align-items: baseline;">
                             <div style="flex-basis:50px;">账号</div>
@@ -135,7 +189,7 @@ flex布局:父节点添加一个属性:justify-content: space-between||space-aro
                         </div>
                         <div class="flex" style="align-items: baseline;">
                             <div style="flex-basis:50px;">账号</div>
-                            <input style="flex-basis:100%;" type="text" class="input"/>
+                            <input style="flex-basis:100%;" type="text" class="input" />
                             <a href="#" class="btn btn-info" style="flex-basis:50px;">验证</a>
                         </div>
                     </div>
@@ -170,8 +224,166 @@ flex布局:
 固定宽:flex-basis: 50px;
 自适应宽:无;
                 </pre>
+                <div class="panel panel-default col-xs-6">
+                    <div class="panel-heading">align-items: center</div>
+                    <div class="panel-body">
+                        <div class="flex flex-algn-end">
+                            <div class="box">1</div>
+                            <div class="box-sm">2</div>
+                            <div class="box">3</div>
+                            <div class="box-sm">4</div>
+                            <div class="box">5</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default col-xs-6">
+                    <div class="panel-heading">vertical-align: bottom</div>
+                    <div class="panel-body">
+                        <div>
+                            <div class="box dib vab">1</div>
+                            <div class="box-sm dib vab">2</div>
+                            <div class="box dib vab">3</div>
+                            <div class="box-sm dib vab">4</div>
+                            <div class="box dib vab">5</div>
+                        </div>
+                    </div>
+                </div>
+                <pre class="col-xs-12">
+vertical-align:需要改变子节点display:inline-block,父级font-size:0(去掉inline-block缝隙),vertical-align:bottom;三种css，
+align-items:父节点添加:align-items:flex-end;</pre>
             </div>
         </div>
-    </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                flex探究
+            </div>
+            <div class="panel-body">
+                <div class="panel panel-default">
+                    <div class="panel-heading">order属性demo</div>
+                    <div class="panel-body">
+                        <div class="flex">
+                            <div class="box" style="order:3">1 order=3 </div>
+                            <div class="box" style="order:5">2 order=5 </div>
+                            <div class="box" style="order:4">3 order=4 </div>
+                            <div class="box" style="order:1">4 order=1 </div>
+                            <div class="box" style="order:2">5 order=2 </div>
+                        </div>
+                    </div>
+                </div>
+                <pre>order属性排序顺序:正常排序（无order属性）>order属性(数值越小越靠前)</pre>
+                <div class="panel panel-default">
+                    <div class="panel-heading">flex-grow属性(计算方式)</div>
+                    <div class="panel-body">
+                        <pre class="mb10">flex-grow的使用组合有多种:
+
+组合1，相同flex-grow值：flex-grow:1
+
+组合2，不相同flex-grow的值：flex-grow:2+flex-grow:1+flex-grow:2......
+
+组合3，不使用flex-grow和使用flex-grow：flex-grow:0+flex-grow:1
+
+组合4，不使用flex-grow和多种不同的flex-grow的值：flex-grow:0+flex-grow:1+flex-grow:2+flex-grow:3......</pre>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">使用相同grow</div>
+                            <div class="panel-body">
+                                <div class="flex mb10">
+                                    <div class="box flex-grow_1"></div>
+                                    <div class="box flex-grow_1"></div>
+                                    <div class="box flex-grow_1"></div>
+                                    <div class="box flex-grow_1"></div>
+                                    <div class="box flex-grow_1"></div>
+                                </div>
+                                <pre class="pre">总结：当属性相同的时候，只有0和1有区别。
+flex-grow:999==flex-grow:1 是一个样的结果
+flex-grow:0和（flex-grow:1||flex-grow:x）是不一样的结果。
+
+例子：flex-grow:1*5
+运算规律：宽度/(1+1+1+1+1)*1</pre>
+                            </div>
+
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading">使用不同grow</div>
+                            <div class="panel-body">
+                                <div class="flex mb10">
+                                    <div class="box flex-grow_1"></div>
+                                    <div class="box flex-grow_1" style="flex-grow:2"></div>
+                                    <div class="box flex-grow_1" style="flex-grow:3"></div>
+                                    <div class="box flex-grow_1" style="flex-grow:4"></div>
+                                    <div class="box flex-grow_1" style="flex-grow:5"></div>
+                                </div>
+                                <pre class="pre">总结：每个总宽度=总宽度/flex-grow的数值获得的总数值*当前数值
+例子：flex-grow:1,flex-grow:2,flex-grow:3,flex-grow:4,flex-grow:5
+运算规律：宽度/(1+2+3+4+5)*当前flex-grow数值</pre>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">不使用grow+使用grow</div>
+                            <div class="panel-body">
+                                <div class="flex mb10">
+                                    <div class="box "></div>
+                                    <div class="box flex-grow_1"></div>
+                                    <div class="box flex-grow_1"></div>
+                                    <div class="box flex-grow_1"></div>
+                                    <div class="box flex-grow_1"></div>
+                                </div>
+                                <pre class="pre">总结：每个总宽宽=(宽度-不使用grow的元素所占宽度)/flex-grow的数值获得的总数值*当前数值
+例子：
+flex-grow宽度为50;
+flex-grow:0,flex-grow:1,flex-grow:1,flex-grow:1,flex-grow:1
+运算规律：(宽度-50)/(1+1+1+1)*1</pre>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">不使用grow+使用不同grow</div>
+                            <div class="panel-body">
+                                <div class="flex mb10">
+                                    <div class="box "></div>
+                                    <div class="box flex-grow_1" style="flex-grow:2"></div>
+                                    <div class="box flex-grow_1" style="flex-grow:3"></div>
+                                    <div class="box flex-grow_1" style="flex-grow:4"></div>
+                                    <div class="box flex-grow_1" style="flex-grow:5"></div>
+                                </div>
+                                <pre class="pre">总结：每个总宽宽=(宽度-不使用grow的元素所占宽度)/flex-grow的数值获得的总数值*当前数值
+例子：
+flex-grow宽度为50;
+flex-grow:0,flex-grow:1,flex-grow:2,flex-grow:3,flex-grow:4
+运算规律：(宽度-50)/(1+2+3+4)*当前flex-grow数值</pre>
+                            </div>
+                        </div>
+                        <pre>flex-grow的计算方式有2种：
+1，全部使用flex-grow的时候(数值！=0)，当前宽度 = 宽度/(全部flex-grow的数值总和)*当前flex-grow数值
+2，部分使用flex-grow，当前宽度 = (宽度 - 不使用flex-grow的所有dom宽度)/(全部flex-grow的数值总和)*当前flex-grow数值
+所以：flex-grow的运算方式为：没有使用flex-grow的时候优先分配，其实分配完的所有宽度在根据比例来计算成各个宽度</pre>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">flex-basis</div>
+                            <div class="panel-body">
+                                <div class="flex mb10">
+                                    <span style="flex-basis:100px;text-align:right;">账号</span>
+                                    <input type="text" style="width:100%;">
+                                </div>
+                                <pre class="pre">总结：
+很适合自适应布局。可以用来考虑替换display:table</pre>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">align-self</div>
+                            <div class="panel-body">
+                                <div class="flex mb10" style="height:200px;align-items:center;justify-content:center;">
+                                   <div class="box"></div>
+                                   <div class="box"></div>
+                                   <div class="box" style="align-self:end;"></div>
+                                   <div class="box"></div>
+                                   <div class="box"></div>
+                                </div>
+                                <pre class="pre">总结：
+会使用vertical-align.那么这个你也会使用。</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 </body>
+
 </html>
