@@ -1,27 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <title>交互权限结果</title>
 </head>
-
 <body>
-    <div class="corde"></div>
+    
 </body>
-<script src="js/jquery.min.js"></script>
-<script src="js/jquery.qrcode.js"></script>
-<script src="js/qrcode.js"></script>
 <script>
-    $(function () {
-        $(".corde").qrcode({
-            width: 120,
-            height: 120,
-            text: '测定'
-        })
-    })
-</script>
+    var property='本部';
 
+    var per = [
+        {value:0,text:'无',per:'全部修改'},
+        {value:1,text:'本人',per:'全部修改'},
+        {value:2,text:'本部',per:'全部修改'},
+        {value:3,text:'跨步',per:'全部修改'},
+    ]
+
+    var per1 = [
+        {value:0,text:'无',per:'部分修改'},
+        {value:1,text:'本人',per:'部分修改'},
+        {value:2,text:'本部',per:'部分修改'},
+        {value:3,text:'跨步',per:'部分修改'},
+    ]
+
+    var grade = [
+        {
+            per:'等级A',text:'无',value:0
+        },
+        {
+            per:'等级B',text:'本人',value:1
+        },
+        {
+            per:'等级C',text:'本部',value:2
+        },
+        {
+            per:'等级D',text:'跨部',value:3
+        },
+        {
+            per:'等级E',text:'无',value:0
+        }
+    ]
+
+    var propertyList = {
+            '本部':function(x){
+                console.log(x)
+            }
+        }
+
+    vs(property,propertyList)
+    function vs(t,s) {
+        s[t](gradeData)
+    }
+</script>
 </html>

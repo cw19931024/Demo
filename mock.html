@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+</head>
+
+<body>
+    <!-- <div>
+        <select name="" id="data">
+            <option value="">请选择</option>
+        </select>
+        <button id="btn">获取</button>
+    </div> -->
+    <div class="panel panel-default" style="width:500px;margin:0 auto;">
+        <div class="panel-body text-center">
+            <div class="col-xs-6">
+                <div class="input-group input-group-sm" style="margin-bottom:10px;">
+                    <div class="input-group-addon">攻击资质</div>
+                    <input type="text" class="form-control input">
+                </div>
+                <div class="input-group input-group-sm" style="margin-bottom:10px;">
+                    <div class="input-group-addon">法力资质</div>
+                    <input type="text" class="form-control input">
+                </div>
+                <div class="input-group input-group-sm" style="margin-bottom:10px;">
+                    <div class="input-group-addon">寿命</div>
+                    <input type="text" class="form-control input">
+                </div>
+                <div class="input-group input-group-sm" style="margin-bottom:10px;">
+                    <div class="input-group-addon">速度</div>
+                    <input type="text" class="form-control input">
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="input-group input-group-sm" style="margin-bottom:10px;">
+                    <div class="input-group-addon">最小值</div>
+                    <input type="text" class="form-control input">
+                </div>
+            </div>
+            <a href="#" style="margin-top:10px;" id="btn" class="btn btn-default btn-sm">生成</a>
+        </div>
+    </div>
+</body>
+<script src="js/jquery.min.js"></script>
+<script>
+    var optionDom = '';
+    for (var i = 10001; i < 10029; i++) {
+        optionDom += "<option value='" + i + "'>" + i + "</option>"
+    }
+    $('#data').append(optionDom);
+    $("#btn1").click(function () {
+        $('#data').val();
+        $.ajax({
+            type: 'get',
+            url: 'https://easy-mock.com/mock/5a2e2e3b89d2205cbfe7b56a/mhxy/petdetail',
+            data: {
+                id: $('#data').val()
+            },
+            success: function (res) {
+                console.log(res)
+            }
+        })
+    })
+</script>
+<script>
+    $(function () {
+        $("#btn").click(function () {
+            count($('.input').eq(0).val())
+        })
+        var start = 0;
+        function count(num) {
+            var radom = parseFloat((Math.random() * 0.2 + '').substring(0, 4));
+            start + 1;
+            if (start < 20) {
+                start = 0;
+            }
+            if (radom == 0 || start == 10) {
+                radom = parseFloat(num);
+            } else {
+                radom += parseFloat(num * 0.8)
+            }
+            radom = parseFloat((radom + '').substring(0, 4))
+            console.log(radom)
+            return radom
+        }
+
+        function synthesis(obj, obj1) {
+
+        }
+    })
+</script>
+
+</html>

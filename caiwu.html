@@ -1,86 +1,32 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="app">
-
+<html lang="en">
 <head>
-    <title></title>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <style>
-        table tbody tr td {
-            position: relative;
-        }
-        
-        .test {
-            position: absolute;
-            bottom: -40px;
-            border: 1px solid #ddd;
-            background: white;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
 </head>
-
-<body ng-controller="Ctrl">
-    <div class="container">
-        <table class="table table-hover table-border">
-            <tr>
-                <th>员工姓名员工编号</th>
-                <th>考勤汇总</th>
-                <th>休息</th>
-                <th ng-repeat="i in title">{{i}}</th>
-            </tr>
-            <tr ng-repeat="item in list">
-                <td>
-                    {{item.deptName}}<br/> {{item.deptId}}
-                </td>
-                <td>
-                    早退:{{item.AbsentAll}}次<br/> 旷工:{{item.Late}}天
-                    <br/> 请假:{{item.APPLYFOR}}天
-                </td>
-                <td>
-                    {{item.LeaveEarly}}天
-                </td>
-                <td ng-repeat="i in item.PunchCard" ng-mouseover="i.show=true" ng-mouseleave="i.show=false">
-                    <div ng-if="i.vacation">休息</div>
-                    <div ng-if="!i.vacation">
-                        <p ng-if="i.typeList[0]">{{i.typeList[0].type}}<span ng-if="i.typeList[0].type=='出勤'" ng-repeat="n in i.typeList[0].time">{{n}}</span></p>
-                        <p ng-if="i.typeList[1]">{{i.typeList[1].type}}<span ng-if="i.typeList[1].type=='出勤'" ng-repeat="n in i.typeList[1].time">{{n}}</span></p>
-                        <p ng-if="i.typeList.length>2">还剩下{{i.typeList.length-2}}项</p>
-                    </div>
-                    <div ng-if="i.show" class="test">
-                        {{i.startDate}}-{{i.endDate}}<br/>
-                        <p ng-repeat="n in i.typeList">
-                            {{n.type}}
-                            <span ng-if="n.type=='考勤'" ng-repeat="y in n.time">{{y}}</span>
-                            <span ng-if="!n.status">审核中</span>
-                        </p>
-                    </div>
-                </td>
-            </tr>
-        </table>
-    </div>
+<body>
+    <input type="file" id="file">
+    <button>上传</button>
 </body>
-<script src="js/angular.js"></script>
+<script src="js/jquery.min.js"></script>
 <script>
-    var app = angular.module('app', []);
-    app.controller('Ctrl', function ($scope, $http) {
-        $scope.list = 
-        $scope.title = [];
-        for(var i=0;i<$scope.list.length;i++){
-            $scope.list[i].PunchCard.forEach(function (e) {
-            $scope.title.push(e.DateStr);
-            e.typeList.forEach(function (res) {
-                if (res.type == '旷工') {
-                    e.className = 'red'
-                } else if (res.type == '事假' && res.remark) {
-                    e.className = 'blue'
-                }
-            })
-        });
-        }
-        console.log($scope.title)
-        console.log($scope.list)
+    $('button').click(function(params) {
+        var file = $("#file")[0].files[0];
+        var Data = new FormData();
+        Data.append('file', file)
+        console.log(Data)
+        $.ajax({
+            url:'text',
+            data: Data,
+            contentType: false,
+            processData: false,
+            type:'post',
+            success:function(){
+
+            }
+        })
     })
 </script>
-
 </html>

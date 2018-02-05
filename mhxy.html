@@ -1,0 +1,439 @@
+<script>
+    var a = [
+        {
+            id: '10001',
+            name: '泡泡',
+            qualifications: {
+                attack: 1320,
+                defense: 1380,
+                body: 4200,
+                mana: 2160,
+                speed: 1320,
+                dodge: 1320,
+                life: 10000,
+                potential: 1.122,
+                wx: ['金', '木', '水', '火', '土']
+            }
+        },
+        {
+            id: '10002',
+            name: '雷鸟人',
+            qualifications: {
+                attack: 1200,
+                defense: 1200,
+                body: 4200,
+                mana: 1920,
+                speed: 1440,
+                dodge: 1140,
+                life: 11000,
+                potential: 1.173,
+                wx: ['金', '木', '水', '火', '土']
+            }
+        },
+        {
+            id: '10003',
+            name: '蝴蝶仙子',
+            qualifications: {
+                attack: 1300,
+                defense: 1140,
+                body: 3000,
+                mana: 3000,
+                speed: 1440,
+                dodge: 1440,
+                life: 8500,
+                potential: 1.122,
+                wx: ['金', '木', '水', '火', '土']
+            }
+        },
+        {
+            id: '10004',
+            name: '天兵',
+            qualifications: {
+                attack: 1320,
+                defense: 1500,
+                body: 5100,
+                mana: 2200,
+                speed: 1320,
+                dodge: 1320,
+                life: 8500,
+                potential: 1.173,
+                wx: ['金', '木', '水', '火', '土']
+            }
+        },
+        {
+            id: '10005',
+            name: '鲛人',
+            qualifications: {
+                attack: 1440,
+                defense: 1440,
+                body: 4560,
+                mana: 1920,
+                speed: 1380,
+                dodge: 1440,
+                life: 8000,
+                potential: 1.224,
+                wx: ['金', '木', '水', '火', '土']
+            }
+        },
+        {
+            id: '10006',
+            name: '蛟龙',
+            qualifications: {
+                attack: 1440,
+                defense: 1440,
+                body: 4560,
+                mana: 3000,
+                speed: 1200,
+                dodge: 1320,
+                life: 8000,
+                potential: 1.224,
+                wx: ['金', '木', '水', '火', '土']
+            }
+        },
+        {
+            id: '10007',
+            name: '凤凰',
+            qualifications: {
+                attack: 1200,
+                defense: 1440,
+                body: 4200,
+                mana: 2400,
+                speed: 1560,
+                dodge: 1320,
+                life: 7500,
+                potential: 1.224,
+                wx: ['金', '木', '水', '火', '土']
+            }
+        },
+        {
+            id: '10008',
+            name: '犀牛将军（人）',
+            qualifications: {
+                attack: 1440,
+                defense: 1464,
+                body: 4800,
+                mana: 2520,
+                speed: 1200,
+                dodge: 1140,
+                life: 7500,
+                potential: 1.254,
+                wx: ['金', '木', '水', '火', '土']
+            }
+        },
+        {
+            id: '10009',
+            name: '犀牛将军（兽）',
+            qualifications: {
+                attack: 1440,
+                defense: 1464,
+                body: 4800,
+                mana: 2520,
+                speed: 1200,
+                dodge: 1140,
+                life: 7500,
+                potential: 1.254,
+                wx: ['金', '木', '水', '火', '土']
+            }
+        },
+        {
+            id: '10010',
+            name: '芙蓉仙子',
+            qualifications: {
+                attack: 1440,
+                defense: 1440,
+                body: 4560,
+                mana: 2400,
+                speed: 1380,
+                dodge: 1440,
+                life: 8000,
+                potential: 1.254,
+                wx: ['金', '木', '水', '火', '土']
+            }
+        },
+        {
+            id: '10011',
+            name: '泪妖',
+            qualifications: {
+                attack: 1200,
+                defense: 1200,
+                body: 3500,
+                mana: 2400,
+                speed: 1200,
+                dodge: 1560,
+                life: 6500,
+                potential: 1.224,
+                wx: ['金', '木', '水', '火', '土']
+            }
+        },
+        {
+            id: '10012',
+            name: '镜妖',
+            qualifications: {
+                attack: 1464,
+                defense: 1320,
+                body: 3840,
+                mana: 2400,
+                speed: 1560,
+                dodge: 1440,
+                life: 8000,
+                potential: 1.254,
+                wx: ['金', '木', '水', '火', '土']
+            }
+        },
+        {
+            id: '10013',
+            name: '吸血鬼',
+            qualifications: {
+                attack: 1440,
+                defense: 1320,
+                body: 3600,
+                mana: 2400,
+                speed: 1520,
+                dodge: 1800,
+                life: 8000,
+                potential: 1.254,
+                wx: ['金', '木', '水', '火', '土']
+            }
+        },
+        {
+            id: '10014',
+            name: '律法女娲',
+            qualifications: {
+                attack: 1440,
+                defense: 1560,
+                body: 4440,
+                mana: 2400,
+                speed: 1440,
+                dodge: 1680,
+                life: 8000,
+                potential: 1.254,
+                wx: ['金', '木', '水', '火', '土']
+            }
+        },
+        {
+            id: '10015',
+            name: '净瓶女娲',
+            qualifications: {
+                attack: 1464,
+                defense: 1440,
+                body: 4800,
+                mana: 2820,
+                speed: 1560,
+                dodge: 1560,
+                life: 6000,
+                potential: 1.264,
+                wx: ['金', '木', '水', '火', '土']
+            }
+        },
+        {
+            id: '10016',
+            name: '鬼将',
+            qualifications: {
+                attack: 1524,
+                defense: 1380,
+                body: 5040,
+                mana: 1440,
+                speed: 1320,
+                dodge: 1320,
+                life: 6000,
+                potential: 1.264,
+                wx: ['金', '木', '水', '火', '土']
+            }
+        },
+        {
+            id: '10017',
+            name: '幽灵',
+            qualifications: {
+                attack: 1476,
+                defense: 1440,
+                body: 4200,
+                mana: 2640,
+                speed: 1320,
+                dodge: 1680,
+                life: 8000,
+                potential: 1.254,
+                wx: ['金', '木', '水', '火', '土']
+            }
+        },
+        {
+            id: '10018',
+            name: '画魂',
+            qualifications: {
+                attack: 1380,
+                defense: 1440,
+                body: 4320,
+                mana: 2880,
+                speed: 1320,
+                dodge: 1440,
+                life: 7000,
+                potential: 1.264,
+                wx: ['金', '木', '水', '火', '土']
+            }
+        },
+        {
+            id: '10019',
+            name: '幽萤娃娃',
+            qualifications: {
+                attack: 1440,
+                defense: 1440,
+                body: 4200,
+                mana: 2640,
+                speed: 1536,
+                dodge: 1560,
+                life: 7000,
+                potential: 1.264,
+                wx: ['金', '木', '水', '火', '土']
+            }
+        },
+        {
+            id: '10020',
+            name: '大力金刚',
+            qualifications: {
+                attack: 1548,
+                defense: 1344,
+                body: 6000,
+                mana: 2640,
+                speed: 1200,
+                dodge: 1320,
+                life: 6000,
+                potential: 1.264,
+                wx: ['金', '木', '水', '火', '土']
+            }
+        },
+        {
+            id: '10021',
+            name: '夜罗刹',
+            qualifications: {
+                attack: 1500,
+                defense: 1440,
+                body: 5760,
+                mana: 2880,
+                speed: 1440,
+                dodge: 1440,
+                life: 6000,
+                potential: 1.264,
+                wx: ['金', '木', '水', '火', '土']
+            }
+        },
+        {
+            id: '10022',
+            name: '龙龟',
+            qualifications: {
+                attack: 1440,
+                defense: 1500,
+                body: 5760,
+                mana: 3000,
+                speed: 1200,
+                dodge: 1560,
+                life: 7000,
+                potential: 1.275,
+                wx: ['金', '木', '水', '火', '土']
+            }
+        },
+        {
+            id: '10023',
+            name: '狂豹（人）',
+            qualifications: {
+                attack: 1536,
+                defense: 1440,
+                body: 4800,
+                mana: 2280,
+                speed: 1440,
+                dodge: 1560,
+                life: 9000,
+                potential: 1.275,
+                wx: ['金', '木', '水', '火', '土']
+            }
+        },
+        {
+            id: '10024',
+            name: '混沌兽',
+            qualifications: {
+                attack: 1440,
+                defense: 1476,
+                body: 5400,
+                mana: 3240,
+                speed: 1320,
+                dodge: 1560,
+                life: 9000,
+                potential: 1.295,
+                wx: ['金', '木', '水', '火', '土']
+            }
+        },
+        {
+            id: '10024',
+            name: '持国巡守',
+            qualifications: {
+                attack: 1440,
+                defense: 1380,
+                body: 6000,
+                mana: 3000,
+                speed: 1200,
+                dodge: 960,
+                life: 8000,
+                potential: 1.275,
+                wx: ['金', '木', '水', '火', '土']
+            }
+        },
+        {
+            id: '10025',
+            name: '修罗傀儡鬼',
+            qualifications: {
+                attack: 1524,
+                defense: 1380,
+                body: 5040,
+                mana: 2400,
+                speed: 1440,
+                dodge: 1440,
+                life: 9000,
+                potential: 1.285,
+                wx: ['金', '木', '水', '火', '土']
+            }
+        },
+        {
+            id: '10026',
+            name: '真陀护法',
+            qualifications: {
+                attack: 1536,
+                defense: 1440,
+                body: 5040,
+                mana: 2400,
+                speed: 1380,
+                dodge: 1560,
+                life: 9000,
+                potential: 1.275,
+                wx: ['金', '木', '水', '火', '土']
+            }
+        },
+        {
+            id: '10027',
+            name: '修罗傀儡鬼',
+            qualifications: {
+                attack: 1524,
+                defense: 1380,
+                body: 5040,
+                mana: 2400,
+                speed: 1440,
+                dodge: 1440,
+                life: 9000,
+                potential: 1.285,
+                wx: ['金', '木', '水', '火', '土']
+            }
+        },
+        {
+            id: '10028',
+            name: '毗舍童子',
+            qualifications: {
+                attack: 1560,
+                defense: 1428,
+                body: 4200,
+                mana: 2160,
+                speed: 1440,
+                dodge: 1520,
+                life: 9000,
+                potential: 1.285,
+                wx: ['金', '木', '水', '火', '土']
+            }
+        },
+    ]
+</script>

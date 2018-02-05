@@ -6,24 +6,18 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 </head>
-<body>
-    <button class="btn">添加</button>
-    <button class="ceshi">修改</button>
-    <div class="test">
-        <div class='cw'>1111</div>
-    </div>
+<body ng-controller="Ctrl">
+    <qrcode data="data"></qrcode>
 </body>
-<script src="js/jquery.min.js"></script>
+<!-- <script src="js/angular.js"></script> -->
+<script src="https://cdn.bootcss.com/angular.js/1.3.20/angular.js"></script>
+<script src="js/qrcode.js"></script>
+<script src="js/qrcode_UTF8.js"></script>
+<script src="js/angular-qrcode.js"></script>
 <script>
-    $('.btn').click(function(){
-        $('.test').append(
-            "<div class='cw'>1111</div>"
-        )
-        
+    var app = angular.module('app',["monospaced.qrcode"]);
+    app.controller('Ctrl',function($scope) {
+        $scope.data = '测'
     })
-    update()
-    function update(){
-        $('.cw').css('background','red')
-    }
 </script>
 </html>
